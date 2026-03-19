@@ -1,0 +1,178 @@
+{%- comment -%}
+  Accepts:
+
+  - section {Section}
+  - button_class {String}
+  - button_prepend_text {String}
+  - append_id {String}
+{%- endcomment -%}
+
+{% liquid
+  capture button_text
+    case settings.country_drawer_display_option
+      when 'country-name--iso-code--currency-symbol'
+        echo localization.country.name | append: ' | ' | append: localization.country.currency.iso_code | append: ' | ' | append: localization.country.currency.symbol
+      when 'country-name--iso-code'
+        echo localization.country.name | append: ' | ' | append: localization.country.currency.iso_code
+      when 'country-name'
+        echo localization.country.name
+      when 'iso-code--currency-symbol'
+        echo localization.country.currency.iso_code | append: ' | ' | append: localization.country.currency.symbol
+      when 'flag'
+        echo ''
+      when 'flag--country-name'
+        echo localization.country.name
+      else
+        echo localization.country.currency.iso_code
+    endcase
+  endcapture
+
+  assign country_drawer_trigger = true
+  assign country_drawer_content = true
+
+  if type == 'trigger'
+    assign country_drawer_content = false
+  elsif type == 'content'
+    assign country_drawer_trigger = false
+  endif
+%}
+
+{%- if button_prepend_text -%}
+  {%- assign button_text = button_text | prepend: ' ' | prepend: button_prepend_text -%}
+{%- endif -%}
+
+<details id="country-drawer-{{- append_id -}}" class="country-drawer drawer__container">
+  {%- if country_drawer_trigger -%}
+    <summary id="country-drawer-button-{{- append_id -}}" class="drawer__button drawer__button--text {{ button_class }}" aria-label="{{- 'theme.localization.country' | t -}}">
+      <div class="text-link">
+        <span class="text-link--on-hover">
+          {%- if settings.country_drawer_display_option == 'flag' or settings.country_drawer_display_option == 'flag--country-name' -%}
+           {% comment %} START CUSTOM ne pas afficher le flag {% endcomment %}
+            <span class="drawer__button-flag">{{ localization.country | image_url: width: 18 | image_tag }}</span>
+            {% comment %} END CUSTOM ne pas afficher le flag{% endcomment %}
+          {%- endif -%}
+          {%- unless settings.country_drawer_display_option == 'flag' -%}
+            <span class="drawer__button-text">{{- button_text -}}</span>
+            {% render 'icon', icon_name: 'theme-chevron', class: 'icon--rotate-90' %}
+          {%- endunless -%}
+          <noscript>
+            {%- render 'icon', icon_name: 'theme-arrow' -%}
+          </noscript>
+        </span>
+      </div>
+    </summary>
+  {%- endif -%}
+  {%- if country_drawer_content -%}
+    <div class="drawer__content js-drawer color-{{ settings.color_scheme_for_drawers }} gradient" id="Country-menu-drawer-{{- append_id -}}" tabindex="-1">
+      <button
+        class="drawer__button-close text-current button-reset no-js-hidden js-btn-close-drawer"
+        aria-label="{{- 'theme.actions.close' | t -}}"
+        aria-controls="Country-menu-drawer-{{- append_id -}}"
+        aria-expanded="false"
+      >
+        {%- render 'icon', icon_name: 'theme-close' -%}
+      </button>
+
+      <div class="drawer__row drawer__row--gutter-sm">
+        {%- if settings.show_country_drawer_title -%}
+          <h2 class="drawer__title">
+            {{- 'theme.localization.change_country' | t -}}
+          </h2>
+        {%- endif -%}
+        {%- if settings.show_country_drawer_content -%}
+          <p>{{- 'theme.localization.content' | t -}}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
+        <div class="drawer__row">
+            {% form 'localization', id: append_id %}
+              <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+              <input type="hidden" name="language_code" value="{{ localization.language.iso_code }}">
+
+              {%- if localization.available_countries.size > 1 -%}
+                <div class="form-row">
+                  <div class="select-input">
+                    <label for="country-drawer-selector-{{- append_id -}}" class="select-input__label visually-hidden">
+                      {{- 'theme.localization.change_currency' | t -}}
+                    </label>
+
+                    <localization-form class="theme-dropdown w-full{% if settings.button_border_radius != "0" %} theme-dropdown-rounded{% endif %}">
+                      <button type="button" id="country-drawer-selector-{{- append_id -}}" class="dropdown-button button button--outlined button--full text-start" aria-haspopup="true" aria-expanded="false">
+                        <span class="dropdown-button__text">
+                          {%- if settings.country_drawer_display_option == 'flag' or settings.country_drawer_display_option == 'flag--country-name' -%}
+                            <span class="dropdown-button__flag">{{ localization.country | image_url: width: 18 | image_tag }}</span>
+                          {%- endif -%}
+                          {%- unless settings.country_drawer_display_option == 'flag' -%}
+                            <span class="dropdown-button__text-content">{{- button_text -}}</span>
+                          {%- endunless -%}
+                        </span>
+                        <span class="visually-hidden">
+                          {{- 'theme.localization.change_currency' | t -}}
+                        </span>
+                        {%- render 'icon', icon_name: 'theme-chevron-down', class: 'icon' -%}
+                      </button>
+                      <div class="dropdown-content" aria-hidden="true">
+                        <ul class="slim-scrollbar" role="menu">
+                          {%- for country in localization.available_countries -%}
+                            {%- capture option_text -%}
+                              ({{- country.currency.iso_code -}}|{{- country.currency.symbol -}})
+                            {%- endcapture -%}
+                            {%- assign option_text = option_text | prepend: ' ' | prepend: country.name -%}
+                            <li role="menuitem"{% if localization.country.iso_code == country.iso_code %} class="is-active"{% endif %}>
+                              <a tabindex="-1" href="#" data-value="{{- country.iso_code -}}">
+                                {{- option_text -}}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      </div>
+                    </localization-form>
+                  </div>
+                </div>
+              {%- endif -%}
+
+              {%- if localization.available_languages.size > 1 -%}
+                <div class="form-row">
+                  <div class="select-input">
+                    <label for="country-drawer-language-{{- append_id -}}" class="select-input__label visually-hidden">
+                      {{- 'theme.localization.change_language' | t -}}
+                    </label>
+
+                    <localization-form class="theme-dropdown w-full{% if settings.button_border_radius != "0" %} theme-dropdown-rounded{% endif %}">
+                      <button type="button" id="country-drawer-language-{{- append_id -}}" class="dropdown-button button button--outlined button--full text-start" aria-haspopup="true" aria-expanded="false">
+                        <span class="dropdown-button__text">
+                          <span class="dropdown-button__text-content">{{- localization.language.endonym_name | capitalize -}}</span>
+                        </span>
+                        <span class="visually-hidden">
+                          {{- 'theme.localization.change_language' | t -}}
+                        </span>
+                        {%- render 'icon', icon_name: 'theme-chevron-down', class: 'icon' -%}
+                      </button>
+                      <div class="dropdown-content" aria-hidden="true">
+                        <ul class="slim-scrollbar" role="menu">
+                          {%- for language in localization.available_languages -%}
+                            <li role="menuitem"{% if language.iso_code == localization.language.iso_code %} class="is-active"{% endif %}>
+                              <a tabindex="-1" href="#" data-value="{{- language.iso_code -}}">
+                                {{- language.endonym_name | capitalize -}}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      </div>
+                    </localization-form>
+                  </div>
+                </div>
+              {%- endif -%}
+
+              <div class="form-row no-js">
+                <button type="submit" class="button button--outlined button--full no-js">
+                  {{- 'theme.localization.submit' | t -}}
+                </button>
+              </div>
+            {% endform %}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</details>
