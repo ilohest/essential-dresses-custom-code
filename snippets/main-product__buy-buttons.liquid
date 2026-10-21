@@ -209,7 +209,7 @@
   id="ProductSubmitButton-{{ section_id }}"
   type="submit"
   name="add"
-  class="product-form__submit button button--filled uppercase button--full"
+  class="product-form__submit product-form__submit--add-to-cart button button--filled uppercase button--full"
   {% if product.selected_or_first_available_variant.available == false
     or quantity_rule_soldout
     or product.selected_or_first_available_variant == nil
@@ -234,12 +234,14 @@
 </button>
 
 {%- if show_dynamic_checkout and product_preorder == false -%}
-  {{ form | payment_button }}
+  <div class="product-form__dynamic-checkout-wrapper">
+    {{ form | payment_button }}
+  </div>
 {%- endif -%}
 
 <a
   id="ProductAppointmentButton-{{ section_id }}"
-  href="/pages/rental?product={{ product.handle }}&variant={{ product.selected_or_first_available_variant.id }}"
+  href="/pages/rental-agenda?product={{ product.handle }}&variant={{ product.selected_or_first_available_variant.id }}"
   class="product-form__appointment button button--filled uppercase button--full"
   style="display: none;"
 >
@@ -279,9 +281,36 @@
   .product-form__appointment {
     grid-column: 1 / -1;
     width: 100%;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
+  }
+
+  .product-form__dynamic-checkout-wrapper {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .product-form__dynamic-checkout-wrapper .shopify-payment-button {
+    width: 100%;
+  }
+
+  .product-form__dynamic-checkout-wrapper .shopify-payment-button__button,
+  .product-form__dynamic-checkout-wrapper .shopify-payment-button__button--unbranded {
+    width: 100% !important;
+    min-width: 100% !important;
+    display: block !important;
+  }
+
+  .product__buy-buttons.is-rental-mode .product-form__quantity-wrapper,
+  .product__buy-buttons.is-rental-mode .product-form__submit--add-to-cart,
+  .product__buy-buttons.is-rental-mode .product-form__dynamic-checkout-wrapper,
+  .product__buy-buttons.is-rental-mode .shopify-payment-button {
+    display: none !important;
+  }
+
+  .product__buy-buttons.is-rental-mode .product-form__appointment {
+    display: flex !important;
   }
 {% endstyle %}
 {% comment %}

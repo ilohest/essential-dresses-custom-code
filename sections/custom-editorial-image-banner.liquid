@@ -1,0 +1,1019 @@
+{% liquid
+  assign has_content = false
+
+  if section.settings.eyebrow != blank
+    assign has_content = true
+  elsif section.settings.heading != blank
+    assign has_content = true
+  elsif section.settings.text != blank
+    assign has_content = true
+  elsif section.settings.button_label_1 != blank
+    assign has_content = true
+  elsif section.settings.button_label_2 != blank
+    assign has_content = true
+  endif
+%}
+
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --editorial-banner-height:
+      {{ section.settings.height_desktop }}svh;
+
+    --editorial-banner-content-width:
+      {{ section.settings.content_width }}px;
+
+    --editorial-banner-overlay-opacity:
+      {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+
+    --editorial-banner-image-position:
+      {{ section.settings.image_position }};
+
+    --editorial-banner-padding:
+      clamp(
+        24px,
+        {{ section.settings.content_padding }}vw,
+        120px
+      );
+  }
+
+
+  /* ==========================================================================
+     SECTION
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .editorial-image-banner {
+    position: relative;
+
+    width: 100%;
+
+    min-height:
+      var(--editorial-banner-height);
+
+    overflow: hidden;
+
+    isolation: isolate;
+  }
+
+
+  /* ==========================================================================
+     IMAGE
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .editorial-image-banner__media {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: -3;
+  }
+
+  #shopify-section-{{ section.id }} .editorial-image-banner__media picture {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .editorial-image-banner__media img,
+  #shopify-section-{{ section.id }} .editorial-image-banner__media svg {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position:
+      var(--editorial-banner-image-position);
+  }
+
+
+  /* ==========================================================================
+     OVERLAY
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .editorial-image-banner__overlay {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: -2;
+
+    pointer-events: none;
+
+    background:
+      rgba(
+        {{ section.settings.overlay_color.red }},
+        {{ section.settings.overlay_color.green }},
+        {{ section.settings.overlay_color.blue }},
+        var(--editorial-banner-overlay-opacity)
+      );
+  }
+
+
+  /*
+   * Gradient optionnel derrière le contenu.
+   *
+   * Il permet de préserver la lisibilité sans assombrir
+   * uniformément toute la photographie.
+   */
+  #shopify-section-{{ section.id }} .editorial-image-banner__content-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: -1;
+
+    pointer-events: none;
+
+    opacity:
+      {{ section.settings.content_overlay_opacity | divided_by: 100.0 }};
+  }
+
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--horizontal-left
+  .editorial-image-banner__content-overlay {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(
+          {{ section.settings.content_overlay_color.red }},
+          {{ section.settings.content_overlay_color.green }},
+          {{ section.settings.content_overlay_color.blue }},
+          0.72
+        )
+        0%,
+
+        rgba(
+          {{ section.settings.content_overlay_color.red }},
+          {{ section.settings.content_overlay_color.green }},
+          {{ section.settings.content_overlay_color.blue }},
+          0.38
+        )
+        35%,
+
+        transparent
+        75%
+      );
+  }
+
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--horizontal-center
+  .editorial-image-banner__content-overlay {
+    background:
+      radial-gradient(
+        ellipse at center,
+
+        rgba(
+          {{ section.settings.content_overlay_color.red }},
+          {{ section.settings.content_overlay_color.green }},
+          {{ section.settings.content_overlay_color.blue }},
+          0.58
+        )
+        0%,
+
+        transparent
+        72%
+      );
+  }
+
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--horizontal-right
+  .editorial-image-banner__content-overlay {
+    background:
+      linear-gradient(
+        270deg,
+        rgba(
+          {{ section.settings.content_overlay_color.red }},
+          {{ section.settings.content_overlay_color.green }},
+          {{ section.settings.content_overlay_color.blue }},
+          0.72
+        )
+        0%,
+
+        rgba(
+          {{ section.settings.content_overlay_color.red }},
+          {{ section.settings.content_overlay_color.green }},
+          {{ section.settings.content_overlay_color.blue }},
+          0.38
+        )
+        35%,
+
+        transparent
+        75%
+      );
+  }
+
+
+  /* ==========================================================================
+     INNER
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .editorial-image-banner__inner {
+    display: flex;
+
+    width: 100%;
+
+    min-height:
+      var(--editorial-banner-height);
+
+    box-sizing: border-box;
+
+    padding:
+      var(--editorial-banner-padding);
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Position verticale
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--vertical-top
+  .editorial-image-banner__inner {
+    align-items: flex-start;
+  }
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--vertical-center
+  .editorial-image-banner__inner {
+    align-items: center;
+  }
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--vertical-bottom
+  .editorial-image-banner__inner {
+    align-items: flex-end;
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Position horizontale
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--horizontal-left
+  .editorial-image-banner__inner {
+    justify-content: flex-start;
+  }
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--horizontal-center
+  .editorial-image-banner__inner {
+    justify-content: center;
+  }
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--horizontal-right
+  .editorial-image-banner__inner {
+    justify-content: flex-end;
+  }
+
+
+  /* ==========================================================================
+     CONTENT
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .editorial-image-banner__content {
+    width: 100%;
+
+    max-width:
+      var(--editorial-banner-content-width);
+  }
+
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--text-left
+  .editorial-image-banner__content {
+    text-align: left;
+  }
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--text-center
+  .editorial-image-banner__content {
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--text-right
+  .editorial-image-banner__content {
+    text-align: right;
+  }
+
+
+  /* ==========================================================================
+     EYEBROW
+     ========================================================================== */
+
+#shopify-section-{{ section.id }} .editorial-image-banner__eyebrow {
+  margin:
+    0
+    0
+    clamp(18px, 2vw, 26px);
+
+  font-size: clamp(0.8rem, 0.75vw, 0.9rem);
+  line-height: 1.2;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+
+  /* ==========================================================================
+     HEADING
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .editorial-image-banner__heading {
+    margin: 0;
+
+    text-wrap: balance;
+  }
+
+
+  /*
+   * L'inline rich text permet notamment d'utiliser <em>.
+   * On laisse le thème gérer la typographie italique.
+   */
+  #shopify-section-{{ section.id }} .editorial-image-banner__heading em {
+    font-weight: inherit;
+  }
+
+
+  /* ==========================================================================
+     TEXT
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .editorial-image-banner__text {
+    max-width: 580px;
+
+    margin-top:
+      clamp(20px, 3vw, 32px);
+  }
+
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--text-center
+  .editorial-image-banner__text {
+    margin-inline: auto;
+  }
+
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--text-right
+  .editorial-image-banner__text {
+    margin-left: auto;
+  }
+
+
+  #shopify-section-{{ section.id }} .editorial-image-banner__text > *:first-child {
+    margin-top: 0;
+  }
+
+  #shopify-section-{{ section.id }} .editorial-image-banner__text > *:last-child {
+    margin-bottom: 0;
+  }
+
+
+  /* ==========================================================================
+     BUTTONS
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .editorial-image-banner__buttons {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin-top:
+      clamp(28px, 4vw, 42px);
+  }
+
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--text-center
+  .editorial-image-banner__buttons {
+    justify-content: center;
+  }
+
+
+  #shopify-section-{{ section.id }}
+  .editorial-image-banner--text-right
+  .editorial-image-banner__buttons {
+    justify-content: flex-end;
+  }
+
+
+  /* ==========================================================================
+     MOBILE
+     ========================================================================== */
+
+  @media screen and (max-width: 749px) {
+
+    #shopify-section-{{ section.id }} {
+      --editorial-banner-height:
+        {{ section.settings.height_mobile }}svh;
+
+      --editorial-banner-padding:
+        24px;
+    }
+
+
+    #shopify-section-{{ section.id }} .editorial-image-banner {
+      min-height:
+        var(--editorial-banner-height);
+    }
+
+
+    #shopify-section-{{ section.id }} .editorial-image-banner__inner {
+      min-height:
+        var(--editorial-banner-height);
+    }
+
+
+    /*
+     * Sur mobile, le gradient devient plus général :
+     * les images sont plus étroites et le contenu
+     * peut occuper une grande partie de l'écran.
+     */
+    #shopify-section-{{ section.id }} .editorial-image-banner__content-overlay {
+      background:
+        linear-gradient(
+          0deg,
+
+          rgba(
+            {{ section.settings.content_overlay_color.red }},
+            {{ section.settings.content_overlay_color.green }},
+            {{ section.settings.content_overlay_color.blue }},
+            0.7
+          )
+          0%,
+
+          rgba(
+            {{ section.settings.content_overlay_color.red }},
+            {{ section.settings.content_overlay_color.green }},
+            {{ section.settings.content_overlay_color.blue }},
+            0.18
+          )
+          65%,
+
+          transparent
+          100%
+        );
+    }
+
+
+    #shopify-section-{{ section.id }} .editorial-image-banner__content {
+      max-width: 100%;
+    }
+
+
+    #shopify-section-{{ section.id }} .editorial-image-banner__buttons {
+      gap: 10px;
+    }
+  }
+{% endstyle %}
+
+
+<div
+  class="
+    editorial-image-banner
+    editorial-image-banner--horizontal-{{ section.settings.content_horizontal }}
+    editorial-image-banner--vertical-{{ section.settings.content_vertical }}
+    editorial-image-banner--text-{{ section.settings.text_alignment }}
+    color-{{ section.settings.color_scheme }}
+  "
+>
+
+
+  {%- comment -%}
+    ========================================================================
+    IMAGE
+    ========================================================================
+  {%- endcomment -%}
+
+  <div class="editorial-image-banner__media">
+
+    {% if section.settings.image_mobile != blank %}
+
+      <picture>
+
+        <source
+          media="(max-width: 749px)"
+          srcset="
+            {{ section.settings.image_mobile | image_url: width: 750 }} 750w,
+            {{ section.settings.image_mobile | image_url: width: 1100 }} 1100w
+          "
+          sizes="100vw"
+        >
+
+        {% if section.settings.image != blank %}
+
+          {% render 'image',
+            image: section.settings.image,
+            section_index: section.index,
+            image_per_view: 1
+          %}
+
+        {% else %}
+
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+
+        {% endif %}
+
+      </picture>
+
+
+    {% elsif section.settings.image != blank %}
+
+      {% render 'image',
+        image: section.settings.image,
+        section_index: section.index,
+        image_per_view: 1
+      %}
+
+
+    {% else %}
+
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+
+    {% endif %}
+
+  </div>
+
+
+  {%- comment -%}
+    ========================================================================
+    OVERLAYS
+    ========================================================================
+  {%- endcomment -%}
+
+  {% if section.settings.overlay_opacity > 0 %}
+
+    <div
+      class="editorial-image-banner__overlay"
+      aria-hidden="true"
+    ></div>
+
+  {% endif %}
+
+
+  {% if section.settings.content_overlay_opacity > 0 %}
+
+    <div
+      class="editorial-image-banner__content-overlay"
+      aria-hidden="true"
+    ></div>
+
+  {% endif %}
+
+
+  {%- comment -%}
+    ========================================================================
+    CONTENT
+    ========================================================================
+  {%- endcomment -%}
+
+  {% if has_content %}
+
+    <div class="editorial-image-banner__inner">
+
+      <div class="editorial-image-banner__content">
+
+
+        {% if section.settings.eyebrow != blank %}
+
+          <p class="editorial-image-banner__eyebrow">
+            {{ section.settings.eyebrow }}
+          </p>
+
+        {% endif %}
+
+
+        {% if section.settings.heading != blank %}
+
+          <h2
+            class="
+              editorial-image-banner__heading
+              {{ section.settings.heading_size }}
+            "
+          >
+            {{ section.settings.heading }}
+          </h2>
+
+        {% endif %}
+
+
+        {% if section.settings.text != blank %}
+
+          <div class="editorial-image-banner__text rte">
+            {{ section.settings.text }}
+          </div>
+
+        {% endif %}
+
+
+        {% if section.settings.button_label_1 != blank or section.settings.button_label_2 != blank %}
+
+          <div class="editorial-image-banner__buttons">
+
+
+            {% if section.settings.button_label_1 != blank %}
+
+              {% render 'button',
+                type: 'link',
+                class: 'button',
+                button_style: section.settings.button_style_1,
+                value: section.settings.button_label_1,
+                href: section.settings.button_link_1
+              %}
+
+            {% endif %}
+
+
+            {% if section.settings.button_label_2 != blank %}
+
+              {% render 'button',
+                type: 'link',
+                class: 'button',
+                button_style: section.settings.button_style_2,
+                value: section.settings.button_label_2,
+                href: section.settings.button_link_2
+              %}
+
+            {% endif %}
+
+
+          </div>
+
+        {% endif %}
+
+
+      </div>
+
+    </div>
+
+  {% endif %}
+
+</div>
+
+
+{% schema %}
+{
+  "name": "Editorial image banner",
+  "tag": "section",
+
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        {
+          "value": "left top",
+          "label": "Top left"
+        },
+        {
+          "value": "center top",
+          "label": "Top"
+        },
+        {
+          "value": "right top",
+          "label": "Top right"
+        },
+        {
+          "value": "left center",
+          "label": "Left"
+        },
+        {
+          "value": "center center",
+          "label": "Center"
+        },
+        {
+          "value": "right center",
+          "label": "Right"
+        },
+        {
+          "value": "left bottom",
+          "label": "Bottom left"
+        },
+        {
+          "value": "center bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "right bottom",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "center center"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "eyebrow",
+      "label": "Subheading",
+      "default": "En Belgique ou à l’autre bout du monde"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Une expérience aussi <em>singulière</em> que la femme qui la porte."
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "h6",
+          "label": "XS"
+        },
+        {
+          "value": "h5",
+          "label": "S"
+        },
+        {
+          "value": "h4",
+          "label": "M"
+        },
+        {
+          "value": "h3",
+          "label": "L"
+        },
+        {
+          "value": "h2",
+          "label": "XL"
+        }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Content position"
+    },
+    {
+      "type": "select",
+      "id": "content_horizontal",
+      "label": "Horizontal position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "content_vertical",
+      "label": "Vertical position",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "min": 320,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width",
+      "default": 720
+    },
+    {
+      "type": "range",
+      "id": "content_padding",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "%",
+      "label": "Content padding",
+      "default": 5
+    },
+
+
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "button_label_1",
+      "label": "Button 1 label",
+      "default": "La boutique"
+    },
+    {
+      "type": "url",
+      "id": "button_link_1",
+      "label": "Button 1 link"
+    },
+    {
+      "type": "select",
+      "id": "button_style_1",
+      "label": "Button 1 style",
+      "options": [
+        {
+          "value": "button--filled",
+          "label": "Filled"
+        },
+        {
+          "value": "button--outlined",
+          "label": "Outlined"
+        },
+        {
+          "value": "button--text",
+          "label": "Text"
+        }
+      ],
+      "default": "button--filled"
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "label": "Button 2 label",
+      "default": "L’atelier"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Button 2 link"
+    },
+    {
+      "type": "select",
+      "id": "button_style_2",
+      "label": "Button 2 style",
+      "options": [
+        {
+          "value": "button--filled",
+          "label": "Filled"
+        },
+        {
+          "value": "button--outlined",
+          "label": "Outlined"
+        },
+        {
+          "value": "button--text",
+          "label": "Text"
+        }
+      ],
+      "default": "button--outlined"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Banner"
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "min": 45,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Desktop height",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Mobile height",
+      "default": 80
+    },
+
+
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Global overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Global overlay opacity",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "content_overlay_color",
+      "label": "Content overlay color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "content_overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Content overlay opacity",
+      "default": 0
+    },
+
+
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-1",
+      "label": "Color scheme"
+    }
+  ],
+
+
+  "presets": [
+    {
+      "name": "Editorial image banner"
+    }
+  ]
+}
+{% endschema %}

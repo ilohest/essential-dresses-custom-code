@@ -1,0 +1,2366 @@
+{% liquid
+  assign fact_blocks = section.blocks | where: 'type', 'fact'
+  assign editorial_image_blocks = section.blocks | where: 'type', 'editorial_image'
+  assign process_blocks = section.blocks | where: 'type', 'process'
+  assign option_blocks = section.blocks | where: 'type', 'option'
+
+  assign calendar_link = section.settings.calendar_link
+  if calendar_link == blank
+    assign calendar_link = '#appointo-modal-content'
+  endif
+%}
+
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --rental-spacing-top:
+      calc(
+        var(--section-spacing-unit-size) *
+        {{ section.settings.spacing_top }}
+      );
+
+    --rental-spacing-bottom:
+      calc(
+        var(--section-spacing-unit-size) *
+        {{ section.settings.spacing_bottom }}
+      );
+  }
+
+
+  #shopify-section-{{ section.id }} > div {
+    padding-block-start:
+      var(--rental-spacing-top);
+
+    padding-block-end:
+      var(--rental-spacing-bottom);
+  }
+
+
+  /* ==========================================================================
+     SMOOTH ANCHOR
+     ========================================================================== */
+
+  #appointo-modal-content {
+    scroll-margin-top:
+      calc(
+        var(--header-height, 80px) +
+        24px
+      );
+  }
+
+
+  /* ==========================================================================
+     GLOBAL
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .rental-story {
+    overflow: visible;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__container {
+    display: flex;
+    flex-direction: column;
+
+    gap:
+      clamp(100px, 11vw, 180px);
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__eyebrow {
+    margin:
+      0
+      0
+      18px;
+
+    font-size:
+      clamp(0.82rem, 0.8vw, 0.95rem);
+
+    line-height: 1.2;
+
+    letter-spacing: 0.15em;
+
+    text-transform: uppercase;
+
+    opacity: 0.6;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__richtext {
+    line-height: 1.65;
+  }
+
+  #shopify-section-{{ section.id }}
+  .rental-story__richtext > *:first-child {
+    margin-top: 0;
+  }
+
+  #shopify-section-{{ section.id }}
+  .rental-story__richtext > *:last-child {
+    margin-bottom: 0;
+  }
+
+
+  /* ==========================================================================
+     INTRO
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .rental-story__intro {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1.2fr)
+      minmax(340px, 0.8fr);
+
+    gap:
+      clamp(60px, 9vw, 150px);
+
+    align-items: start;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__intro-main {
+    max-width: 900px;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__intro-heading {
+    max-width: 850px;
+
+    margin:
+      0
+      0
+      clamp(28px, 4vw, 46px);
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__intro-text {
+    max-width: 620px;
+  }
+
+
+  /* ==========================================================================
+     PRACTICAL INFORMATION
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .rental-story__facts {
+    border-top:
+      1px solid
+      rgba(var(--color-foreground), 0.16);
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__fact {
+    display: grid;
+
+    grid-template-columns:
+      minmax(130px, 0.42fr)
+      minmax(0, 1fr);
+
+    gap: 28px;
+
+    padding-block:
+      clamp(24px, 2.5vw, 34px);
+
+    border-bottom:
+      1px solid
+      rgba(var(--color-foreground), 0.16);
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__fact-label {
+    padding-top: 3px;
+
+    font-size:
+      clamp(0.84rem, 0.85vw, 1rem);
+
+    line-height: 1.2;
+
+    letter-spacing: 0.14em;
+
+    text-transform: uppercase;
+
+    opacity: 0.62;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__fact-value {
+    font-size:
+      clamp(1.12rem, 1.35vw, 1.4rem);
+
+    line-height: 1.35;
+  }
+
+
+  /* ==========================================================================
+     EDITORIAL GALLERY
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .rental-story__gallery {
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__gallery-grid {
+    display: grid;
+
+    grid-template-columns:
+      repeat(12, minmax(0, 1fr));
+
+    column-gap:
+      clamp(18px, 3vw, 52px);
+
+    row-gap:
+      clamp(80px, 10vw, 160px);
+
+    align-items: start;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__gallery-item {
+    width: 100%;
+
+    min-width: 0;
+
+    margin: 0;
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Large
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }}
+  .rental-story__gallery-item--large.rental-story__gallery-item--left {
+    grid-column:
+      1 / span 5;
+  }
+
+  #shopify-section-{{ section.id }}
+  .rental-story__gallery-item--large.rental-story__gallery-item--center {
+    grid-column:
+      4 / span 6;
+  }
+
+  #shopify-section-{{ section.id }}
+  .rental-story__gallery-item--large.rental-story__gallery-item--right {
+    grid-column:
+      8 / span 5;
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Medium
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }}
+  .rental-story__gallery-item--medium.rental-story__gallery-item--left {
+    grid-column:
+      1 / span 4;
+  }
+
+  #shopify-section-{{ section.id }}
+  .rental-story__gallery-item--medium.rental-story__gallery-item--center {
+    grid-column:
+      5 / span 4;
+  }
+
+  #shopify-section-{{ section.id }}
+  .rental-story__gallery-item--medium.rental-story__gallery-item--right {
+    grid-column:
+      9 / span 4;
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Small
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }}
+  .rental-story__gallery-item--small.rental-story__gallery-item--left {
+    grid-column:
+      1 / span 3;
+  }
+
+  #shopify-section-{{ section.id }}
+  .rental-story__gallery-item--small.rental-story__gallery-item--center {
+    grid-column:
+      6 / span 3;
+  }
+
+  #shopify-section-{{ section.id }}
+  .rental-story__gallery-item--small.rental-story__gallery-item--right {
+    grid-column:
+      10 / span 3;
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Rhythm
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }}
+  .rental-story__gallery-item:nth-child(2n) {
+    margin-top:
+      clamp(24px, 4vw, 64px);
+  }
+
+  #shopify-section-{{ section.id }}
+  .rental-story__gallery-item:nth-child(3n) {
+    margin-top:
+      clamp(8px, 2vw, 28px);
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Image
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }} .rental-story__gallery-image {
+    width: 100%;
+
+    aspect-ratio:
+      var(--rental-gallery-ratio, 4 / 5);
+
+    max-height:
+      calc(
+        100svh -
+        var(--header-height, 80px) -
+        80px
+      );
+
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }}
+  .rental-story__gallery-image img,
+
+  #shopify-section-{{ section.id }}
+  .rental-story__gallery-image svg {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__gallery-caption {
+    margin-top: 12px;
+
+    font-size: 0.85rem;
+    line-height: 1.4;
+
+    opacity: 0.52;
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Statement
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }} .rental-story__gallery-statement {
+    max-width: 1000px;
+
+    margin:
+      clamp(100px, 12vw, 180px)
+      auto
+      0;
+
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }}
+  .rental-story__gallery-statement-heading {
+    margin: 0;
+
+    text-wrap: balance;
+  }
+
+
+  /* ==========================================================================
+     PROCESS
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .rental-story__process {
+    display: grid;
+
+    grid-template-columns:
+      minmax(300px, 0.72fr)
+      minmax(0, 1.28fr);
+
+    gap:
+      clamp(70px, 9vw, 155px);
+
+    align-items: start;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__process-head {
+    position: sticky;
+
+    top:
+      calc(
+        var(--header-height, 80px) +
+        48px
+      );
+
+    align-self: start;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__process-heading {
+    max-width: 520px;
+
+    margin:
+      0
+      0
+      30px;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__process-intro {
+    max-width: 440px;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__steps {
+    border-top:
+      1px solid
+      rgba(var(--color-foreground), 0.16);
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__step {
+    display: grid;
+
+    grid-template-columns:
+      72px
+      minmax(0, 1fr);
+
+    gap:
+      clamp(18px, 3vw, 42px);
+
+    padding-block:
+      clamp(30px, 3.5vw, 48px);
+
+    border-bottom:
+      1px solid
+      rgba(var(--color-foreground), 0.16);
+
+    opacity: 0.25;
+
+    transform:
+      translateX(10px);
+
+    transition:
+      opacity 0.45s ease,
+      transform 0.45s
+      cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__step.is-active {
+    opacity: 1;
+
+    transform:
+      translateX(0);
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__step-number {
+    padding-top: 7px;
+
+    font-size:
+      clamp(0.8rem, 0.8vw, 0.92rem);
+
+    line-height: 1.2;
+
+    letter-spacing: 0.14em;
+
+    opacity: 0.55;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__step-heading {
+    margin:
+      0
+      0
+      14px;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__step-text {
+    max-width: 680px;
+  }
+
+
+  /* ==========================================================================
+     OPTIONS
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .rental-story__options-head {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 0.8fr)
+      minmax(0, 1.2fr);
+
+    gap: 40px;
+
+    align-items: end;
+
+    margin-bottom:
+      clamp(44px, 6vw, 80px);
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__options-heading {
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__options-intro {
+    max-width: 560px;
+
+    margin-left: auto;
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Grid
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }} .rental-story__options-grid {
+    display: grid;
+
+    grid-template-columns:
+      repeat(
+        {{ option_blocks.size | at_most: 3 }},
+        minmax(0, 1fr)
+      );
+
+    gap:
+      var(--grid-spacing);
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Card
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }} .rental-story__option {
+    display: flex;
+    flex-direction: column;
+
+    min-height:
+      clamp(360px, 38vw, 540px);
+
+    padding:
+      clamp(34px, 5vw, 68px);
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__option-number {
+    display: block;
+
+    margin-bottom: auto;
+
+    font-size:
+      clamp(0.78rem, 0.75vw, 0.9rem);
+
+    line-height: 1.2;
+
+    letter-spacing: 0.14em;
+
+    opacity: 0.55;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__option-content {
+    max-width: 620px;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__option-heading {
+    margin:
+      0
+      0
+      20px;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__option-button {
+    margin-top: 30px;
+  }
+
+
+  /* ==========================================================================
+     CALENDAR TRANSITION
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .rental-story__calendar-transition {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height:
+      clamp(360px, 48svh, 560px);
+
+    padding:
+      clamp(50px, 8vw, 100px);
+
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__calendar-content {
+    max-width: 920px;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__calendar-heading {
+    margin:
+      0
+      0
+      28px;
+
+    text-wrap: balance;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__calendar-text {
+    max-width: 620px;
+
+    margin-inline: auto;
+  }
+
+  #shopify-section-{{ section.id }} .rental-story__calendar-arrow {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 44px;
+
+    margin:
+      34px
+      auto
+      0;
+
+    border:
+      1px solid
+      rgba(var(--color-foreground), 0.25);
+
+    border-radius: 50%;
+
+    color: inherit;
+
+    font-size: 18px;
+    line-height: 1;
+
+    text-decoration: none;
+
+    opacity: 0.7;
+
+    cursor: pointer;
+
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.3s ease;
+  }
+
+
+  /* ==========================================================================
+     HOVER
+     ========================================================================== */
+
+  @media
+    (hover: hover)
+    and
+    (prefers-reduced-motion: no-preference) {
+
+    #shopify-section-{{ section.id }}
+    .rental-story__gallery-image img {
+      transition:
+        transform
+        0.8s
+        cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    #shopify-section-{{ section.id }}
+    .rental-story__gallery-item:hover
+    .rental-story__gallery-image img {
+      transform:
+        scale(1.025);
+    }
+
+    #shopify-section-{{ section.id }}
+    .rental-story__calendar-arrow:hover {
+      opacity: 1;
+
+      transform:
+        translateY(5px);
+
+      border-color:
+        rgba(var(--color-foreground), 0.5);
+    }
+  }
+
+
+  /* ==========================================================================
+     TABLET
+     ========================================================================== */
+
+  @media screen and (max-width: 989px) {
+
+    #shopify-section-{{ section.id }} .rental-story__container {
+      gap: 110px;
+    }
+
+
+    /* Intro */
+
+    #shopify-section-{{ section.id }} .rental-story__intro {
+      grid-template-columns: 1fr;
+
+      gap: 56px;
+    }
+
+    #shopify-section-{{ section.id }} .rental-story__facts {
+      max-width: 680px;
+    }
+
+
+    /* Process */
+
+    #shopify-section-{{ section.id }} .rental-story__process {
+      grid-template-columns: 1fr;
+
+      gap: 48px;
+    }
+
+    #shopify-section-{{ section.id }} .rental-story__process-head {
+      position: relative;
+
+      top: auto;
+    }
+
+    #shopify-section-{{ section.id }} .rental-story__step {
+      opacity: 1;
+
+      transform: none;
+    }
+
+
+    /* Options */
+
+    #shopify-section-{{ section.id }} .rental-story__options-grid {
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    }
+
+  }
+
+
+  /* ==========================================================================
+     MOBILE
+     ========================================================================== */
+
+  @media screen and (max-width: 749px) {
+
+    #shopify-section-{{ section.id }} .rental-story__container {
+      gap: 84px;
+    }
+
+
+    /* ------------------------------------------------------------------------
+       Intro
+       ------------------------------------------------------------------------ */
+
+    #shopify-section-{{ section.id }} .rental-story__fact {
+      grid-template-columns: 1fr;
+
+      gap: 8px;
+    }
+
+
+    /* ------------------------------------------------------------------------
+       Gallery
+       ------------------------------------------------------------------------ */
+
+    #shopify-section-{{ section.id }} .rental-story__gallery-grid {
+      grid-template-columns:
+        repeat(12, minmax(0, 1fr));
+
+      column-gap: 8px;
+
+      row-gap: 68px;
+    }
+
+
+    /* Large */
+
+    #shopify-section-{{ section.id }}
+    .rental-story__gallery-item--large.rental-story__gallery-item--left {
+      grid-column:
+        1 / span 10;
+    }
+
+    #shopify-section-{{ section.id }}
+    .rental-story__gallery-item--large.rental-story__gallery-item--center {
+      grid-column:
+        2 / span 10;
+    }
+
+    #shopify-section-{{ section.id }}
+    .rental-story__gallery-item--large.rental-story__gallery-item--right {
+      grid-column:
+        3 / span 10;
+    }
+
+
+    /* Medium */
+
+    #shopify-section-{{ section.id }}
+    .rental-story__gallery-item--medium.rental-story__gallery-item--left {
+      grid-column:
+        1 / span 8;
+    }
+
+    #shopify-section-{{ section.id }}
+    .rental-story__gallery-item--medium.rental-story__gallery-item--center {
+      grid-column:
+        3 / span 8;
+    }
+
+    #shopify-section-{{ section.id }}
+    .rental-story__gallery-item--medium.rental-story__gallery-item--right {
+      grid-column:
+        5 / span 8;
+    }
+
+
+    /* Small */
+
+    #shopify-section-{{ section.id }}
+    .rental-story__gallery-item--small.rental-story__gallery-item--left {
+      grid-column:
+        1 / span 6;
+    }
+
+    #shopify-section-{{ section.id }}
+    .rental-story__gallery-item--small.rental-story__gallery-item--center {
+      grid-column:
+        4 / span 6;
+    }
+
+    #shopify-section-{{ section.id }}
+    .rental-story__gallery-item--small.rental-story__gallery-item--right {
+      grid-column:
+        7 / span 6;
+    }
+
+    #shopify-section-{{ section.id }}
+    .rental-story__gallery-item:nth-child(2n) {
+      margin-top: 26px;
+    }
+
+    #shopify-section-{{ section.id }}
+    .rental-story__gallery-item:nth-child(3n) {
+      margin-top: 0;
+    }
+
+
+    /* ------------------------------------------------------------------------
+       Process
+       ------------------------------------------------------------------------ */
+
+    #shopify-section-{{ section.id }} .rental-story__step {
+      grid-template-columns:
+        38px
+        minmax(0, 1fr);
+
+      gap: 14px;
+
+      padding-block: 28px;
+    }
+
+
+    /* ------------------------------------------------------------------------
+       Options
+       ------------------------------------------------------------------------ */
+
+    #shopify-section-{{ section.id }} .rental-story__options-head {
+      grid-template-columns: 1fr;
+
+      gap: 24px;
+
+      margin-bottom: 38px;
+    }
+
+    #shopify-section-{{ section.id }} .rental-story__options-intro {
+      margin-left: 0;
+    }
+
+    #shopify-section-{{ section.id }} .rental-story__options-grid {
+      grid-template-columns: 1fr;
+
+      gap: 12px;
+    }
+
+    #shopify-section-{{ section.id }} .rental-story__option {
+      min-height: 360px;
+
+      padding:
+        36px
+        26px;
+    }
+
+
+    /* ------------------------------------------------------------------------
+       Calendar
+       ------------------------------------------------------------------------ */
+
+    #shopify-section-{{ section.id }} .rental-story__calendar-transition {
+      min-height: 400px;
+
+      padding:
+        56px
+        24px;
+    }
+
+  }
+{% endstyle %}
+
+
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+
+  <div
+    class="
+      rental-story
+      container
+      {{ section.settings.section_width }}
+      js-animation-fade-in
+    "
+  >
+
+    <div class="rental-story__container">
+
+
+      {%- comment -%}
+        ================================================================
+        INTRO
+        ================================================================
+      {%- endcomment -%}
+
+      <section class="rental-story__intro">
+
+        <div class="rental-story__intro-main">
+
+          {% if section.settings.intro_eyebrow != blank %}
+
+            <p class="rental-story__eyebrow">
+              {{ section.settings.intro_eyebrow }}
+            </p>
+
+          {% endif %}
+
+
+          {% if section.settings.intro_heading != blank %}
+
+            <h2 class="rental-story__intro-heading {{ section.settings.intro_heading_size }}">
+              {{ section.settings.intro_heading }}
+            </h2>
+
+          {% endif %}
+
+
+          {% if section.settings.intro_text != blank %}
+
+            <div class="rental-story__intro-text rental-story__richtext rte">
+              {{ section.settings.intro_text }}
+            </div>
+
+          {% endif %}
+
+        </div>
+
+
+        {% if fact_blocks.size > 0 %}
+
+          <div class="rental-story__facts">
+
+            {% for block in fact_blocks %}
+
+              <div
+                class="rental-story__fact"
+                {{ block.shopify_attributes }}
+              >
+
+                {% if block.settings.label != blank %}
+
+                  <span class="rental-story__fact-label">
+                    {{ block.settings.label }}
+                  </span>
+
+                {% endif %}
+
+
+                {% if block.settings.value != blank %}
+
+                  <span class="rental-story__fact-value">
+                    {{ block.settings.value }}
+                  </span>
+
+                {% endif %}
+
+              </div>
+
+            {% endfor %}
+
+          </div>
+
+        {% endif %}
+
+      </section>
+
+
+
+      {%- comment -%}
+        ================================================================
+        EDITORIAL GALLERY
+        ================================================================
+      {%- endcomment -%}
+
+      {% if editorial_image_blocks.size > 0 %}
+
+        <section class="rental-story__gallery">
+
+          <div class="rental-story__gallery-grid">
+
+            {% for block in editorial_image_blocks %}
+
+              <figure
+                class="
+                  rental-story__gallery-item
+                  rental-story__gallery-item--{{ block.settings.size }}
+                  rental-story__gallery-item--{{ block.settings.alignment }}
+                "
+                {{ block.shopify_attributes }}
+              >
+
+                {% if block.settings.image != blank %}
+
+                  <div
+                    class="rental-story__gallery-image"
+                    style="
+                      --rental-gallery-ratio:
+                        {{ block.settings.aspect_ratio }};
+                    "
+                  >
+
+                    {% render 'image',
+                      image: block.settings.image,
+                      section_index: section.index,
+                      image_per_view: 3
+                    %}
+
+                  </div>
+
+                {% endif %}
+
+
+                {% if block.settings.caption != blank %}
+
+                  <figcaption class="rental-story__gallery-caption">
+                    {{ block.settings.caption }}
+                  </figcaption>
+
+                {% endif %}
+
+              </figure>
+
+            {% endfor %}
+
+          </div>
+
+
+          {% if section.settings.gallery_heading != blank %}
+
+            <div class="rental-story__gallery-statement">
+
+              <h2 class="rental-story__gallery-statement-heading {{ section.settings.gallery_heading_size }}">
+                {{ section.settings.gallery_heading }}
+              </h2>
+
+            </div>
+
+          {% endif %}
+
+        </section>
+
+      {% endif %}
+
+
+
+      {%- comment -%}
+        ================================================================
+        PROCESS
+        ================================================================
+      {%- endcomment -%}
+
+      {% if process_blocks.size > 0 %}
+
+        <section class="rental-story__process">
+
+          <div class="rental-story__process-head">
+
+            {% if section.settings.process_eyebrow != blank %}
+
+              <p class="rental-story__eyebrow">
+                {{ section.settings.process_eyebrow }}
+              </p>
+
+            {% endif %}
+
+
+            {% if section.settings.process_heading != blank %}
+
+              <h2 class="rental-story__process-heading {{ section.settings.process_heading_size }}">
+                {{ section.settings.process_heading }}
+              </h2>
+
+            {% endif %}
+
+
+            {% if section.settings.process_text != blank %}
+
+              <div class="rental-story__process-intro rental-story__richtext rte">
+                {{ section.settings.process_text }}
+              </div>
+
+            {% endif %}
+
+          </div>
+
+
+          <div class="rental-story__steps">
+
+            {% for block in process_blocks %}
+
+              <article
+                class="rental-story__step"
+                {{ block.shopify_attributes }}
+              >
+
+                <span class="rental-story__step-number">
+
+                  {% if block.settings.number != blank %}
+                    {{ block.settings.number }}
+                  {% else %}
+                    0{{ forloop.index }}
+                  {% endif %}
+
+                </span>
+
+
+                <div>
+
+                  {% if block.settings.heading != blank %}
+
+                    <h3 class="rental-story__step-heading {{ block.settings.heading_size }}">
+                      {{ block.settings.heading }}
+                    </h3>
+
+                  {% endif %}
+
+
+                  {% if block.settings.text != blank %}
+
+                    <div class="rental-story__step-text rental-story__richtext rte">
+                      {{ block.settings.text }}
+                    </div>
+
+                  {% endif %}
+
+                </div>
+
+              </article>
+
+            {% endfor %}
+
+          </div>
+
+        </section>
+
+      {% endif %}
+
+
+
+      {%- comment -%}
+        ================================================================
+        LOCATION / PURCHASE OPTIONS
+        ================================================================
+      {%- endcomment -%}
+
+      {% if option_blocks.size > 0 %}
+
+        <section class="rental-story__options">
+
+          <div class="rental-story__options-head">
+
+            <div>
+
+              {% if section.settings.options_eyebrow != blank %}
+
+                <p class="rental-story__eyebrow">
+                  {{ section.settings.options_eyebrow }}
+                </p>
+
+              {% endif %}
+
+
+              {% if section.settings.options_heading != blank %}
+
+                <h2 class="rental-story__options-heading {{ section.settings.options_heading_size }}">
+                  {{ section.settings.options_heading }}
+                </h2>
+
+              {% endif %}
+
+            </div>
+
+
+            {% if section.settings.options_text != blank %}
+
+              <div class="rental-story__options-intro rental-story__richtext rte">
+                {{ section.settings.options_text }}
+              </div>
+
+            {% endif %}
+
+          </div>
+
+
+          <div class="rental-story__options-grid">
+
+            {% for block in option_blocks %}
+
+              <article
+                class="
+                  rental-story__option
+                  color-{{ block.settings.color_scheme }}
+                  gradient
+                "
+                {{ block.shopify_attributes }}
+              >
+
+                <span class="rental-story__option-number">
+
+                  {% if block.settings.number != blank %}
+                    {{ block.settings.number }}
+                  {% else %}
+                    0{{ forloop.index }}
+                  {% endif %}
+
+                </span>
+
+
+                <div class="rental-story__option-content">
+
+                  {% if block.settings.heading != blank %}
+
+                    <h3 class="rental-story__option-heading {{ block.settings.heading_size }}">
+                      {{ block.settings.heading }}
+                    </h3>
+
+                  {% endif %}
+
+
+                  {% if block.settings.text != blank %}
+
+                    <div class="rental-story__richtext rte">
+                      {{ block.settings.text }}
+                    </div>
+
+                  {% endif %}
+
+
+                  {% if block.settings.button_label != blank %}
+
+                    <div class="rental-story__option-button">
+
+                      {% render 'button',
+                        type: 'link',
+                        class: 'button',
+                        button_style: block.settings.button_style,
+                        value: block.settings.button_label,
+                        href: block.settings.button_link
+                      %}
+
+                    </div>
+
+                  {% endif %}
+
+                </div>
+
+              </article>
+
+            {% endfor %}
+
+          </div>
+
+        </section>
+
+      {% endif %}
+
+
+
+      {%- comment -%}
+        ================================================================
+        CALENDAR TRANSITION
+        ================================================================
+      {%- endcomment -%}
+
+      {% if section.settings.calendar_heading != blank %}
+
+        <section
+          class="
+            rental-story__calendar-transition
+            color-{{ section.settings.calendar_color_scheme }}
+            gradient
+          "
+        >
+
+          <div class="rental-story__calendar-content">
+
+            {% if section.settings.calendar_eyebrow != blank %}
+
+              <p class="rental-story__eyebrow">
+                {{ section.settings.calendar_eyebrow }}
+              </p>
+
+            {% endif %}
+
+
+            <h2 class="rental-story__calendar-heading {{ section.settings.calendar_heading_size }}">
+              {{ section.settings.calendar_heading }}
+            </h2>
+
+
+            {% if section.settings.calendar_text != blank %}
+
+              <div class="rental-story__calendar-text rental-story__richtext rte">
+                {{ section.settings.calendar_text }}
+              </div>
+
+            {% endif %}
+
+
+            <a
+              href="{{ calendar_link }}"
+              class="rental-story__calendar-arrow"
+              aria-label="Aller à la prise de rendez-vous"
+            >
+              ↓
+            </a>
+
+          </div>
+
+        </section>
+
+      {% endif %}
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<script>
+  (() => {
+    const section =
+      document.querySelector(
+        '#shopify-section-{{ section.id }}'
+      );
+
+    if (!section) return;
+
+
+    /* ========================================================================
+       SMOOTH SCROLL TO APPOINTMENT
+       ======================================================================== */
+
+    const appointmentHash =
+      '#appointo-modal-content';
+
+
+    const appointmentLinks =
+      section.querySelectorAll(
+        `a[href*="${appointmentHash}"]`
+      );
+
+
+    appointmentLinks.forEach((link) => {
+
+      link.addEventListener(
+        'click',
+        (event) => {
+
+          const target =
+            document.querySelector(
+              appointmentHash
+            );
+
+
+          if (!target) {
+            return;
+          }
+
+
+          const linkUrl =
+            new URL(
+              link.href,
+              window.location.href
+            );
+
+
+          const currentUrl =
+            new URL(
+              window.location.href
+            );
+
+
+          const isCurrentPage =
+            linkUrl.origin === currentUrl.origin &&
+            linkUrl.pathname === currentUrl.pathname;
+
+
+          if (!isCurrentPage) {
+            return;
+          }
+
+
+          event.preventDefault();
+
+
+          const reduceMotion =
+            window.matchMedia(
+              '(prefers-reduced-motion: reduce)'
+            ).matches;
+
+
+          target.scrollIntoView({
+            behavior:
+              reduceMotion
+                ? 'auto'
+                : 'smooth',
+
+            block:
+              'start'
+          });
+
+
+          if (
+            window.location.hash !==
+            appointmentHash
+          ) {
+
+            history.pushState(
+              null,
+              '',
+              appointmentHash
+            );
+
+          }
+
+        }
+      );
+
+    });
+
+
+
+    const process =
+      section.querySelector(
+        '.rental-story__process'
+      );
+
+
+    const steps =
+      section.querySelectorAll(
+        '.rental-story__step'
+      );
+
+
+    if (
+      !process ||
+      !steps.length
+    ) {
+      return;
+    }
+
+
+    /* ========================================================================
+       ACTIVE PROCESS STEP
+       ======================================================================== */
+
+    const setActiveStep = () => {
+
+      if (window.innerWidth < 990) {
+
+        steps.forEach((step) => {
+
+          step.classList.add(
+            'is-active'
+          );
+
+        });
+
+        return;
+      }
+
+
+      const processRect =
+        process.getBoundingClientRect();
+
+
+      if (
+        processRect.bottom < 0 ||
+        processRect.top > window.innerHeight
+      ) {
+        return;
+      }
+
+
+      const target =
+        window.innerHeight * 0.46;
+
+
+      let closestStep =
+        null;
+
+
+      let closestDistance =
+        Infinity;
+
+
+      steps.forEach((step) => {
+
+        const rect =
+          step.getBoundingClientRect();
+
+
+        const center =
+          rect.top +
+          rect.height / 2;
+
+
+        const distance =
+          Math.abs(
+            center -
+            target
+          );
+
+
+        if (
+          distance <
+          closestDistance
+        ) {
+
+          closestDistance =
+            distance;
+
+          closestStep =
+            step;
+
+        }
+
+      });
+
+
+      steps.forEach((step) => {
+
+        step.classList.toggle(
+          'is-active',
+          step === closestStep
+        );
+
+      });
+
+    };
+
+
+    let ticking =
+      false;
+
+
+    const handleScroll = () => {
+
+      if (ticking) return;
+
+
+      ticking =
+        true;
+
+
+      requestAnimationFrame(() => {
+
+        setActiveStep();
+
+        ticking =
+          false;
+
+      });
+
+    };
+
+
+    setActiveStep();
+
+
+    window.addEventListener(
+      'scroll',
+      handleScroll,
+      {
+        passive: true
+      }
+    );
+
+
+    window.addEventListener(
+      'resize',
+      setActiveStep,
+      {
+        passive: true
+      }
+    );
+
+
+    /* ========================================================================
+       SHOPIFY EDITOR
+       ======================================================================== */
+
+    if (
+      typeof Shopify !== 'undefined' &&
+      Shopify.designMode
+    ) {
+
+      document.addEventListener(
+        'shopify:block:select',
+        setActiveStep
+      );
+
+
+      document.addEventListener(
+        'shopify:section:load',
+        setActiveStep
+      );
+
+    }
+  })();
+</script>
+
+
+
+{% schema %}
+{
+  "name": "Rental story",
+  "tag": "section",
+
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "Introduction"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "intro_eyebrow",
+      "label": "Subheading",
+      "default": "La location Essential Dresses"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "intro_heading",
+      "label": "Heading",
+      "default": "Votre <em>expérience</em> de location."
+    },
+    {
+      "type": "select",
+      "id": "intro_heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "h5",
+          "label": "S"
+        },
+        {
+          "value": "h4",
+          "label": "M"
+        },
+        {
+          "value": "h3",
+          "label": "L"
+        },
+        {
+          "value": "h2",
+          "label": "XL"
+        }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "richtext",
+      "id": "intro_text",
+      "label": "Text",
+      "default": "<p>Essayez nos robes au showroom et choisissez la silhouette qui accompagnera votre événement. Nous nous occupons du reste.</p>"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Gallery"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "gallery_heading",
+      "label": "Statement",
+      "default": "Une robe pour <em>votre moment</em>, sans compromis sur l’allure."
+    },
+    {
+      "type": "select",
+      "id": "gallery_heading_size",
+      "label": "Statement size",
+      "options": [
+        {
+          "value": "h5",
+          "label": "S"
+        },
+        {
+          "value": "h4",
+          "label": "M"
+        },
+        {
+          "value": "h3",
+          "label": "L"
+        },
+        {
+          "value": "h2",
+          "label": "XL"
+        }
+      ],
+      "default": "h2"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Process"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "process_eyebrow",
+      "label": "Subheading",
+      "default": "Comment ça marche"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "process_heading",
+      "label": "Heading",
+      "default": "La location, étape par <em>étape</em>."
+    },
+    {
+      "type": "select",
+      "id": "process_heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "h5",
+          "label": "S"
+        },
+        {
+          "value": "h4",
+          "label": "M"
+        },
+        {
+          "value": "h3",
+          "label": "L"
+        },
+        {
+          "value": "h2",
+          "label": "XL"
+        }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "richtext",
+      "id": "process_text",
+      "label": "Text",
+      "default": "<p>De l’essayage au retour de la robe, nous avons imaginé un parcours simple pour que vous puissiez profiter pleinement de votre événement.</p>"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Rental or purchase"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "options_eyebrow",
+      "label": "Subheading",
+      "default": "Deux possibilités"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "options_heading",
+      "label": "Heading",
+      "default": "Louer maintenant ou commander votre <em>propre robe</em>."
+    },
+    {
+      "type": "select",
+      "id": "options_heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "h5",
+          "label": "S"
+        },
+        {
+          "value": "h4",
+          "label": "M"
+        },
+        {
+          "value": "h3",
+          "label": "L"
+        },
+        {
+          "value": "h2",
+          "label": "XL"
+        }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "richtext",
+      "id": "options_text",
+      "label": "Text",
+      "default": "<p>Choisissez la formule qui correspond à votre événement et à votre envie.</p>"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Calendar transition"
+    },
+    {
+      "type": "color_scheme",
+      "id": "calendar_color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "calendar_eyebrow",
+      "label": "Subheading",
+      "default": "Votre rendez-vous"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "calendar_heading",
+      "label": "Heading",
+      "default": "Prête à essayer <em>votre robe</em> ?"
+    },
+    {
+      "type": "select",
+      "id": "calendar_heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "h5",
+          "label": "S"
+        },
+        {
+          "value": "h4",
+          "label": "M"
+        },
+        {
+          "value": "h3",
+          "label": "L"
+        },
+        {
+          "value": "h2",
+          "label": "XL"
+        }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "richtext",
+      "id": "calendar_text",
+      "label": "Text",
+      "default": "<p>Choisissez votre créneau pour un essayage au showroom à Bruxelles et découvrez les modèles disponibles pour votre événement.</p>"
+    },
+    {
+      "type": "url",
+      "id": "calendar_link",
+      "label": "Calendar link",
+      "info": "Lien utilisé par la flèche. Si vide, #appointo-modal-content sera utilisé."
+    },
+
+
+    {
+      "type": "header",
+      "content": "Section settings"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "max-w-page",
+          "label": "Page"
+        },
+        {
+          "value": "max-w-narrower",
+          "label": "Narrower"
+        },
+        {
+          "value": "max-w-fluid",
+          "label": "Fluid"
+        },
+        {
+          "value": "max-w-full",
+          "label": "Full"
+        }
+      ],
+      "default": "max-w-page"
+    },
+    {
+      "type": "select",
+      "id": "spacing_top",
+      "label": "Top spacing",
+      "options": [
+        {
+          "value": "0",
+          "label": "No"
+        },
+        {
+          "value": "1",
+          "label": "S"
+        },
+        {
+          "value": "2",
+          "label": "M"
+        },
+        {
+          "value": "4",
+          "label": "L"
+        },
+        {
+          "value": "6",
+          "label": "XL"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "spacing_bottom",
+      "label": "Bottom spacing",
+      "options": [
+        {
+          "value": "0",
+          "label": "No"
+        },
+        {
+          "value": "1",
+          "label": "S"
+        },
+        {
+          "value": "2",
+          "label": "M"
+        },
+        {
+          "value": "4",
+          "label": "L"
+        },
+        {
+          "value": "6",
+          "label": "XL"
+        }
+      ],
+      "default": "4"
+    }
+
+  ],
+
+
+  "blocks": [
+
+    {
+      "type": "fact",
+      "name": "Practical information",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Tarif"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Value",
+          "default": "À partir de 50 €"
+        }
+      ]
+    },
+
+
+    {
+      "type": "editorial_image",
+      "name": "Editorial image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Size",
+          "options": [
+            {
+              "value": "large",
+              "label": "Large"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "value": "small",
+              "label": "Small"
+            }
+          ],
+          "default": "medium"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "aspect_ratio",
+          "label": "Format",
+          "options": [
+            {
+              "value": "1 / 1",
+              "label": "Square"
+            },
+            {
+              "value": "4 / 5",
+              "label": "Portrait 4:5"
+            },
+            {
+              "value": "3 / 4",
+              "label": "Portrait 3:4"
+            },
+            {
+              "value": "2 / 3",
+              "label": "Portrait 2:3"
+            },
+            {
+              "value": "4 / 3",
+              "label": "Landscape 4:3"
+            },
+            {
+              "value": "3 / 2",
+              "label": "Landscape 3:2"
+            },
+            {
+              "value": "16 / 9",
+              "label": "Landscape 16:9"
+            }
+          ],
+          "default": "4 / 5"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption"
+        }
+      ]
+    },
+
+
+    {
+      "type": "process",
+      "name": "Rental step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Essayage"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            {
+              "value": "h6",
+              "label": "XS"
+            },
+            {
+              "value": "h5",
+              "label": "S"
+            },
+            {
+              "value": "h4",
+              "label": "M"
+            },
+            {
+              "value": "h3",
+              "label": "L"
+            }
+          ],
+          "default": "h4"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    },
+
+
+    {
+      "type": "option",
+      "name": "Rental / purchase option",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Color scheme",
+          "default": "scheme-1"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "La <em>location</em>"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            {
+              "value": "h5",
+              "label": "S"
+            },
+            {
+              "value": "h4",
+              "label": "M"
+            },
+            {
+              "value": "h3",
+              "label": "L"
+            },
+            {
+              "value": "h2",
+              "label": "XL"
+            }
+          ],
+          "default": "h3"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "options": [
+            {
+              "value": "button--filled",
+              "label": "Filled"
+            },
+            {
+              "value": "button--outlined",
+              "label": "Outlined"
+            },
+            {
+              "value": "button--text",
+              "label": "Text"
+            }
+          ],
+          "default": "button--outlined"
+        }
+      ]
+    }
+
+  ],
+
+
+  "presets": [
+    {
+      "name": "Rental story",
+
+      "blocks": [
+
+        {
+          "type": "fact",
+          "settings": {
+            "label": "Essayages",
+            "value": "Showroom à Bruxelles, sur rendez-vous"
+          }
+        },
+        {
+          "type": "fact",
+          "settings": {
+            "label": "Tarif",
+            "value": "À partir de 50 €"
+          }
+        },
+        {
+          "type": "fact",
+          "settings": {
+            "label": "Réservation",
+            "value": "Acompte de 50 € en espèces"
+          }
+        },
+        {
+          "type": "fact",
+          "settings": {
+            "label": "Retrait & retour",
+            "value": "Aux dates convenues"
+          }
+        },
+        {
+          "type": "fact",
+          "settings": {
+            "label": "Nettoyage",
+            "value": "Inclus"
+          }
+        },
+
+
+        {
+          "type": "editorial_image",
+          "settings": {
+            "size": "medium",
+            "alignment": "left",
+            "aspect_ratio": "3 / 4"
+          }
+        },
+        {
+          "type": "editorial_image",
+          "settings": {
+            "size": "large",
+            "alignment": "right",
+            "aspect_ratio": "4 / 3"
+          }
+        },
+        {
+          "type": "editorial_image",
+          "settings": {
+            "size": "small",
+            "alignment": "right",
+            "aspect_ratio": "1 / 1"
+          }
+        },
+
+
+        {
+          "type": "process",
+          "settings": {
+            "number": "01",
+            "heading": "Essayage",
+            "text": "<p>Choisissez votre rendez-vous au showroom et essayez les silhouettes qui correspondent à votre événement et à vos envies.</p>"
+          }
+        },
+        {
+          "type": "process",
+          "settings": {
+            "number": "02",
+            "heading": "Réservation",
+            "text": "<p>Une fois votre robe choisie, la réservation est confirmée avec un acompte de 50 € en espèces.</p>"
+          }
+        },
+        {
+          "type": "process",
+          "settings": {
+            "number": "03",
+            "heading": "Votre événement",
+            "text": "<p>Retirez votre robe à la date convenue et profitez pleinement de votre événement.</p>"
+          }
+        },
+        {
+          "type": "process",
+          "settings": {
+            "number": "04",
+            "heading": "Retour",
+            "text": "<p>Rapportez simplement la robe à la date prévue. Le nettoyage est inclus dans la location.</p>"
+          }
+        },
+
+
+        {
+          "type": "option",
+          "settings": {
+            "number": "01",
+            "color_scheme": "scheme-1",
+            "heading": "La <em>location</em>",
+            "text": "<p>Portez une robe Essential Dresses le temps de votre événement. Les essayages ont lieu au showroom à Bruxelles, sur rendez-vous.</p><p>À partir de 50 €.</p>",
+            "button_label": "Prendre rendez-vous",
+            "button_style": "button--filled"
+          }
+        },
+        {
+          "type": "option",
+          "settings": {
+            "number": "02",
+            "color_scheme": "scheme-2",
+            "heading": "La <em>commande</em>",
+            "text": "<p>Toutes nos robes disponibles à la location peuvent également être commandées neuves.</p>",
+            "button_label": "Voir la boutique",
+            "button_style": "button--outlined"
+          }
+        }
+
+      ]
+    }
+  ]
+}
+{% endschema %}

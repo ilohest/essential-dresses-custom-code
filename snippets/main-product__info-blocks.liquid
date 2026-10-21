@@ -853,15 +853,36 @@
   const productHandle = {{ product.handle | json }};
 
   function getSelectedPurchaseType() {
+    const checkedInput = document.querySelector(
+      '.product__variant-picker input[type="radio"]:checked'
+    );
+
+    if (!checkedInput) return null;
+
+    const checkedValue = checkedInput.value ? checkedInput.value.trim().toLowerCase() : '';
+
+    if (checkedValue === 'achat' || checkedValue === 'location') {
+      return checkedValue;
+    }
+
+    const allCheckedInputs = document.querySelectorAll('.product__variant-picker input[type="radio"]:checked');
+
+    for (const input of allCheckedInputs) {
+      const value = input.value ? input.value.trim().toLowerCase() : '';
+      if (value === 'achat' || value === 'location') {
+        return value;
+      }
+    }
+
     const fieldsets = document.querySelectorAll('fieldset.js.product__variant-options');
 
     for (const fieldset of fieldsets) {
-      const legend = fieldset.querySelector('legend');
-      if (!legend) continue;
+      const checked = fieldset.querySelector('input[type="radio"]:checked');
+      if (!checked) continue;
 
-      if (legend.textContent.toLowerCase().includes('type')) {
-        const checked = fieldset.querySelector('input[type="radio"]:checked');
-        return checked ? checked.value : null;
+      const value = checked.value ? checked.value.trim().toLowerCase() : '';
+      if (value === 'achat' || value === 'location') {
+        return value;
       }
     }
 
@@ -875,11 +896,10 @@
 
   function updateProductPurchaseMode() {
     const selectedType = getSelectedPurchaseType();
+    const isRental = selectedType === 'location';
 
-    const addToCartBtn = document.querySelector('.product__buy-buttons [name="add"]');
-    const dynamicCheckout = document.querySelector('.product__buy-buttons .shopify-payment-button');
+    const buyButtonsWrapper = document.querySelector('.product__buy-buttons');
     const appointmentBtn = document.querySelector('[id^="ProductAppointmentButton-"]');
-    const quantityWrapper = document.querySelector('.product__buy-buttons .product-form__quantity-wrapper');
 
     const nativePriceBlock = document.querySelector('.product__price');
     const rentalPriceBlock = document.querySelector('[data-rental-price]');
@@ -887,35 +907,35 @@
     const variantId = getSelectedVariantId();
 
     if (appointmentBtn) {
-      appointmentBtn.href = `/pages/rental?product=${productHandle}&variant=${variantId}`;
+      appointmentBtn.href = `/pages/rental-agenda?product=${productHandle}&variant=${variantId}`;
     }
 
-    if (selectedType === 'Location') {
-      if (addToCartBtn) addToCartBtn.style.display = 'none';
-      if (dynamicCheckout) dynamicCheckout.style.display = 'none';
-      if (quantityWrapper) quantityWrapper.style.display = 'none';
+    if (buyButtonsWrapper) {
+      buyButtonsWrapper.classList.toggle('is-rental-mode', isRental);
+    }
+
+    if (isRental) {
       if (nativePriceBlock) nativePriceBlock.style.display = 'none';
       if (rentalPriceBlock) rentalPriceBlock.style.display = 'block';
-      if (appointmentBtn) appointmentBtn.style.display = 'flex';
     } else {
-      if (addToCartBtn) addToCartBtn.style.display = '';
-      if (dynamicCheckout) dynamicCheckout.style.display = '';
-      if (quantityWrapper) quantityWrapper.style.display = '';
       if (nativePriceBlock) nativePriceBlock.style.display = '';
       if (rentalPriceBlock) rentalPriceBlock.style.display = 'none';
-      if (appointmentBtn) appointmentBtn.style.display = 'none';
     }
   }
 
   document.addEventListener('DOMContentLoaded', function () {
     updateProductPurchaseMode();
+
+    setTimeout(updateProductPurchaseMode, 50);
+    setTimeout(updateProductPurchaseMode, 200);
+    setTimeout(updateProductPurchaseMode, 500);
   });
 
   document.addEventListener('change', function (event) {
     if (event.target.matches('.product__variant-picker input[type="radio"]')) {
-      requestAnimationFrame(() => {
-        setTimeout(updateProductPurchaseMode, 0);
-      });
+      setTimeout(updateProductPurchaseMode, 0);
+      setTimeout(updateProductPurchaseMode, 50);
+      setTimeout(updateProductPurchaseMode, 200);
     }
   });
 </script>

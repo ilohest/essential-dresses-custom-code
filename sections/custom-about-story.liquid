@@ -1,0 +1,2361 @@
+{% liquid
+  assign story_image_blocks = section.blocks | where: 'type', 'story_image'
+  assign pillar_blocks = section.blocks | where: 'type', 'pillar'
+  assign service_blocks = section.blocks | where: 'type', 'service'
+  assign service_image_blocks = section.blocks | where: 'type', 'service_image'
+  assign service_image_block = service_image_blocks.first
+%}
+
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --about-spacing-top:
+      calc(var(--section-spacing-unit-size) * {{ section.settings.spacing_top }});
+
+    --about-spacing-bottom:
+      calc(var(--section-spacing-unit-size) * {{ section.settings.spacing_bottom }});
+
+    --about-header-height:
+      var(--header-height, 80px);
+  }
+
+
+  #shopify-section-{{ section.id }} > div {
+    padding-block-start:
+      var(--about-spacing-top);
+
+    padding-block-end:
+      var(--about-spacing-bottom);
+  }
+
+
+  /* ==========================================================================
+     GLOBAL
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .about-story {
+    overflow: visible;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__container {
+    display: flex;
+    flex-direction: column;
+
+    gap: clamp(100px, 12vw, 190px);
+  }
+
+  #shopify-section-{{ section.id }} .about-story__eyebrow {
+   margin:
+    0
+    0
+    clamp(18px, 2vw, 26px);
+
+  font-size: clamp(0.8rem, 0.75vw, 0.9rem);
+  line-height: 1.2;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__richtext {
+    line-height: 1.65;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__richtext > *:first-child {
+    margin-top: 0;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__richtext > *:last-child {
+    margin-bottom: 0;
+  }
+
+
+  /* ==========================================================================
+     INTRO
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .about-story__intro {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 0.75fr)
+      minmax(0, 1.25fr);
+
+    gap: clamp(40px, 8vw, 140px);
+
+    align-items: end;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__intro-heading {
+    max-width: 900px;
+
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__intro-text {
+    max-width: 540px;
+
+    margin-left: auto;
+  }
+
+
+  /* ==========================================================================
+     MISSION
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .about-story__story {
+    display: grid;
+
+    grid-template-columns:
+      minmax(320px, 0.8fr)
+      minmax(0, 1.2fr);
+
+    gap: clamp(60px, 8vw, 140px);
+
+    align-items: start;
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Mission — texte sticky
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }} .about-story__story-content {
+    position: sticky;
+
+    top: calc(
+      var(--about-header-height) + 32px
+    );
+
+    align-self: start;
+
+    padding-block:
+      clamp(20px, 4vw, 50px);
+  }
+
+  #shopify-section-{{ section.id }} .about-story__story-heading {
+    margin:
+      0
+      0
+      clamp(28px, 4vw, 48px);
+  }
+
+  #shopify-section-{{ section.id }} .about-story__story-text {
+    max-width: 520px;
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Mission — galerie verticale
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }} .about-story__story-media {
+    display: flex;
+    flex-direction: column;
+
+    gap: clamp(50px, 7vw, 110px);
+  }
+
+  #shopify-section-{{ section.id }} .about-story__story-image {
+    width: 100%;
+
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__story-image-media {
+    width: 100%;
+
+    aspect-ratio:
+      var(--story-image-ratio, 4 / 3);
+
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__story-image-media img,
+  #shopify-section-{{ section.id }} .about-story__story-image-media svg {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Mission — tailles
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }} .about-story__story-image--large {
+    max-width: 760px;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__story-image--medium {
+    max-width: 580px;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__story-image--small {
+    max-width: 420px;
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Mission — alignements
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }} .about-story__story-image--left {
+    margin-right: auto;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__story-image--center {
+    margin-inline: auto;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__story-image--right {
+    margin-left: auto;
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Mission — légende
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }} .about-story__story-caption {
+    margin-top: 12px;
+
+    font-size: 0.85rem;
+    line-height: 1.4;
+
+    opacity: 0.55;
+  }
+
+
+  /* ==========================================================================
+     SIGNATURE
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .about-story__signature {
+    position: relative;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__signature-head {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 0.8fr)
+      minmax(0, 1.2fr);
+
+    gap: 40px;
+
+    align-items: end;
+
+    margin-bottom:
+      clamp(30px, 4vw, 54px);
+  }
+
+  #shopify-section-{{ section.id }} .about-story__signature-heading {
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__signature-intro {
+    max-width: 560px;
+
+    margin-left: auto;
+  }
+
+
+  /* ==========================================================================
+     SIGNATURE — TRACK
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .about-story__horizontal-track {
+    position: relative;
+
+    height: 100vh;
+  }
+
+
+  /*
+   * Cette zone reste centrée dans le viewport
+   * pendant le déplacement horizontal.
+   */
+  #shopify-section-{{ section.id }} .about-story__horizontal-sticky {
+    position: sticky;
+
+    top: var(--about-header-height);
+
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    height: calc(
+      100svh -
+      var(--about-header-height)
+    );
+
+    overflow: hidden;
+  }
+
+
+  /*
+   * Le rail est déplacé par transform.
+   * Aucun scroll horizontal natif sur desktop.
+   */
+  #shopify-section-{{ section.id }} .about-story__scroller {
+    display: flex;
+
+    align-items: center;
+
+    gap: var(--grid-spacing);
+
+    width: max-content;
+
+    transform: translate3d(
+      var(--about-horizontal-x, 0px),
+      0,
+      0
+    );
+
+    will-change: transform;
+  }
+
+
+  /* ==========================================================================
+     SIGNATURE — CARTES
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .about-story__pillar {
+    display: flex;
+
+    flex:
+      0
+      0
+      min(58vw, 760px);
+
+    flex-direction: column;
+
+    min-height:
+      clamp(390px, 48vw, 620px);
+
+    box-sizing: border-box;
+
+    padding:
+      clamp(28px, 4vw, 52px);
+
+    border:
+      1px
+      solid
+      rgba(var(--color-foreground), 0.16);
+  }
+
+  #shopify-section-{{ section.id }} .about-story__pillar-image {
+    width: 100%;
+
+    margin-bottom: 32px;
+
+    aspect-ratio: 16 / 10;
+
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__pillar-image img,
+  #shopify-section-{{ section.id }} .about-story__pillar-image svg {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__pillar-number {
+    margin-bottom: auto;
+
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+
+    opacity: 0.55;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__pillar-content {
+    display: grid;
+
+    gap: 22px;
+
+    max-width: 520px;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__pillar-heading {
+    margin: 0;
+  }
+
+
+ /* ==========================================================================
+   SIGNATURE — MOBILE NAVIGATION
+   ========================================================================== */
+
+#shopify-section-{{ section.id }} .about-story__slider-navigation {
+  display: none;
+}
+
+#shopify-section-{{ section.id }} .about-story__slider-next {
+  display: none;
+}
+
+
+@media screen and (max-width: 989px) {
+
+  #shopify-section-{{ section.id }} .about-story__slider-navigation {
+    display: flex;
+    justify-content: flex-end;
+
+    width: 100%;
+
+    margin-top: 20px;
+  }
+
+
+  #shopify-section-{{ section.id }} .about-story__slider-next {
+    position: static;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 44px;
+
+    padding: 0;
+
+    color: rgb(var(--color-foreground));
+    background: transparent;
+
+    border:
+      1px solid
+      rgba(var(--color-foreground), 0.3);
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease,
+      border-color 0.25s ease;
+  }
+
+
+  #shopify-section-{{ section.id }} .about-story__slider-next span {
+    display: block;
+
+    font-size: 20px;
+    line-height: 1;
+
+    transform: translateY(-1px);
+  }
+
+
+  #shopify-section-{{ section.id }} .about-story__slider-next:active {
+    transform: scale(0.94);
+  }
+
+
+  #shopify-section-{{ section.id }} .about-story__slider-next.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+
+  /* ==========================================================================
+     SERVICES
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .about-story__services {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1.05fr)
+      minmax(360px, 0.95fr);
+
+    gap: clamp(50px, 7vw, 120px);
+
+    align-items: center;
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Services — image
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }} .about-story__services-media {
+    width: 100%;
+
+    height: min(
+      76svh,
+      760px
+    );
+
+    max-height: calc(
+      100svh -
+      var(--about-header-height) -
+      64px
+    );
+
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__services-media img,
+  #shopify-section-{{ section.id }} .about-story__services-media svg {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position:
+      var(--services-image-position, center);
+  }
+
+
+  /* --------------------------------------------------------------------------
+     Services — contenu
+     -------------------------------------------------------------------------- */
+
+  #shopify-section-{{ section.id }} .about-story__services-content {
+    padding-block:
+      clamp(20px, 4vw, 60px);
+  }
+
+  #shopify-section-{{ section.id }} .about-story__services-heading {
+    margin:
+      0
+      0
+      clamp(36px, 5vw, 64px);
+  }
+
+  #shopify-section-{{ section.id }} .about-story__service {
+    display: grid;
+
+    grid-template-columns:
+      50px
+      minmax(0, 1fr);
+
+    gap: 20px;
+
+    padding-block:
+      clamp(28px, 4vw, 44px);
+
+    border-top:
+      1px
+      solid
+      rgba(var(--color-foreground), 0.16);
+  }
+
+  #shopify-section-{{ section.id }} .about-story__service:last-of-type {
+    border-bottom:
+      1px
+      solid
+      rgba(var(--color-foreground), 0.16);
+  }
+
+  #shopify-section-{{ section.id }} .about-story__service-number {
+    padding-top: 6px;
+
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+
+    opacity: 0.5;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__service-content {
+    min-width: 0;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__service-heading {
+    margin:
+      0
+      0
+      12px;
+  }
+
+  #shopify-section-{{ section.id }} .about-story__service-button {
+    margin-top: 24px;
+  }
+
+
+  /* ==========================================================================
+     IMAGE HOVER
+     ========================================================================== */
+
+  @media
+    (hover: hover)
+    and
+    (prefers-reduced-motion: no-preference) {
+
+    #shopify-section-{{ section.id }} .about-story__story-image-media img,
+    #shopify-section-{{ section.id }} .about-story__pillar-image img,
+    #shopify-section-{{ section.id }} .about-story__services-media img {
+      transition:
+        transform
+        0.8s
+        cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    #shopify-section-{{ section.id }} .about-story__story-image:hover img,
+    #shopify-section-{{ section.id }} .about-story__pillar:hover img,
+    #shopify-section-{{ section.id }} .about-story__services-media:hover img {
+      transform: scale(1.025);
+    }
+  }
+
+
+  /* ==========================================================================
+     TABLET
+     ========================================================================== */
+
+  @media screen and (max-width: 989px) {
+
+    #shopify-section-{{ section.id }} .about-story__container {
+      gap: 110px;
+    }
+
+
+    /* Intro */
+
+    #shopify-section-{{ section.id }} .about-story__intro {
+      grid-template-columns: 1fr;
+
+      gap: 32px;
+    }
+
+    #shopify-section-{{ section.id }} .about-story__intro-text {
+      margin-left: 0;
+    }
+
+
+    /* Mission */
+
+    #shopify-section-{{ section.id }} .about-story__story {
+      grid-template-columns: 1fr;
+
+      gap: 50px;
+    }
+
+    #shopify-section-{{ section.id }} .about-story__story-content {
+      position: relative;
+
+      top: auto;
+
+      padding: 0;
+    }
+
+    #shopify-section-{{ section.id }} .about-story__story-text {
+      max-width: 650px;
+    }
+
+    #shopify-section-{{ section.id }} .about-story__story-image--large,
+    #shopify-section-{{ section.id }} .about-story__story-image--medium,
+    #shopify-section-{{ section.id }} .about-story__story-image--small {
+      width: 100%;
+
+      max-width: none;
+    }
+
+
+    /* Signature */
+
+    #shopify-section-{{ section.id }} .about-story__signature-head {
+      grid-template-columns: 1fr;
+
+      gap: 24px;
+    }
+
+    #shopify-section-{{ section.id }} .about-story__signature-intro {
+      margin-left: 0;
+    }
+
+
+    /*
+     * Désactivation du système sticky sur tablette/mobile.
+     */
+    #shopify-section-{{ section.id }} .about-story__horizontal-track {
+      height: auto !important;
+    }
+
+    #shopify-section-{{ section.id }} .about-story__horizontal-sticky {
+      position: relative;
+
+      top: auto;
+
+      display: block;
+
+      height: auto;
+
+      overflow: visible;
+    }
+
+    #shopify-section-{{ section.id }} .about-story__scroller {
+      width: 100%;
+
+      padding-block: 20px;
+
+      overflow-x: auto;
+      overflow-y: hidden;
+
+      transform: none !important;
+
+      overscroll-behavior-x: contain;
+
+      -webkit-overflow-scrolling: touch;
+
+      scrollbar-width: none;
+    }
+
+    #shopify-section-{{ section.id }} .about-story__scroller::-webkit-scrollbar {
+      display: none;
+    }
+
+    #shopify-section-{{ section.id }} .about-story__pillar {
+      flex-basis: 76vw;
+
+      min-height: 460px;
+    }
+
+
+    /* Services */
+
+    #shopify-section-{{ section.id }} .about-story__services {
+      grid-template-columns: 1fr;
+
+      gap: 48px;
+    }
+
+    #shopify-section-{{ section.id }} .about-story__services-media {
+      height: auto;
+
+      max-height: none;
+
+      aspect-ratio: 4 / 3;
+    }
+
+    #shopify-section-{{ section.id }} .about-story__services-content {
+      padding: 0;
+    }
+  }
+
+
+  /* ==========================================================================
+     MOBILE
+     ========================================================================== */
+
+  @media screen and (max-width: 749px) {
+
+    #shopify-section-{{ section.id }} .about-story__container {
+      gap: 84px;
+    }
+
+
+    /* Mission */
+
+    #shopify-section-{{ section.id }} .about-story__story-media {
+      gap: 42px;
+    }
+
+
+    /* Signature */
+
+    #shopify-section-{{ section.id }} .about-story__signature-head {
+      margin-bottom: 28px;
+    }
+
+    #shopify-section-{{ section.id }} .about-story__pillar {
+      flex-basis: 86vw;
+
+      min-height: 430px;
+
+      padding: 28px;
+    }
+
+
+    /* Services */
+
+    #shopify-section-{{ section.id }} .about-story__services-media {
+      aspect-ratio: 4 / 5;
+    }
+
+    #shopify-section-{{ section.id }} .about-story__service {
+      grid-template-columns:
+        36px
+        minmax(0, 1fr);
+
+      gap: 14px;
+    }
+  }
+{% endstyle %}
+
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+
+  <div
+    class="
+      about-story
+      container
+      {{ section.settings.section_width }}
+      js-animation-fade-in
+    "
+  >
+
+    <div class="about-story__container">
+
+
+      {%- comment -%}
+        ================================================================
+        INTRO
+        ================================================================
+      {%- endcomment -%}
+
+      {% if section.settings.intro_heading != blank or section.settings.intro_text != blank %}
+
+        <div class="about-story__intro">
+
+          <div>
+
+            {% if section.settings.intro_eyebrow != blank %}
+
+              <p class="about-story__eyebrow">
+                {{ section.settings.intro_eyebrow }}
+              </p>
+
+            {% endif %}
+
+
+            {% if section.settings.intro_heading != blank %}
+
+              <h2 class="about-story__intro-heading {{ section.settings.intro_heading_size }}">
+                {{ section.settings.intro_heading }}
+              </h2>
+
+            {% endif %}
+
+          </div>
+
+
+          {% if section.settings.intro_text != blank %}
+
+            <div class="about-story__intro-text about-story__richtext rte">
+              {{ section.settings.intro_text }}
+            </div>
+
+          {% endif %}
+
+        </div>
+
+      {% endif %}
+
+
+
+      {%- comment -%}
+        ================================================================
+        MISSION
+        ================================================================
+      {%- endcomment -%}
+
+      {% if section.settings.story_heading != blank or story_image_blocks.size > 0 %}
+
+        <div class="about-story__story">
+
+          <div class="about-story__story-content">
+
+            {% if section.settings.story_eyebrow != blank %}
+
+              <p class="about-story__eyebrow">
+                {{ section.settings.story_eyebrow }}
+              </p>
+
+            {% endif %}
+
+
+            {% if section.settings.story_heading != blank %}
+
+              <h2 class="about-story__story-heading {{ section.settings.story_heading_size }}">
+                {{ section.settings.story_heading }}
+              </h2>
+
+            {% endif %}
+
+
+            {% if section.settings.story_text != blank %}
+
+              <div class="about-story__story-text about-story__richtext rte">
+                {{ section.settings.story_text }}
+              </div>
+
+            {% endif %}
+
+          </div>
+
+
+          <div class="about-story__story-media">
+
+            {% for block in story_image_blocks %}
+
+              <figure
+                class="
+                  about-story__story-image
+                  about-story__story-image--{{ block.settings.size }}
+                  about-story__story-image--{{ block.settings.alignment }}
+                "
+                {{ block.shopify_attributes }}
+              >
+
+                {% if block.settings.image != blank %}
+
+                  <div
+                    class="about-story__story-image-media"
+                    style="
+                      --story-image-ratio:
+                        {{ block.settings.aspect_ratio }};
+                    "
+                  >
+
+                    {% render 'image',
+                      image: block.settings.image,
+                      section_index: section.index,
+                      image_per_view: 2
+                    %}
+
+                  </div>
+
+                {% endif %}
+
+
+                {% if block.settings.caption != blank %}
+
+                  <figcaption class="about-story__story-caption">
+                    {{ block.settings.caption }}
+                  </figcaption>
+
+                {% endif %}
+
+              </figure>
+
+            {% endfor %}
+
+          </div>
+
+        </div>
+
+      {% endif %}
+
+
+
+      {%- comment -%}
+        ================================================================
+        SIGNATURE
+        ================================================================
+      {%- endcomment -%}
+
+{% if pillar_blocks.size > 0 %}
+
+  <div class="about-story__signature">
+
+    <div class="about-story__signature-head">
+
+      <div>
+
+        {% if section.settings.signature_eyebrow != blank %}
+          <p class="about-story__eyebrow">
+            {{ section.settings.signature_eyebrow }}
+          </p>
+        {% endif %}
+
+        {% if section.settings.signature_heading != blank %}
+          <h2 class="about-story__signature-heading {{ section.settings.signature_heading_size }}">
+            {{ section.settings.signature_heading }}
+          </h2>
+        {% endif %}
+
+      </div>
+
+      {% if section.settings.signature_text != blank %}
+        <div class="about-story__signature-intro about-story__richtext rte">
+          {{ section.settings.signature_text }}
+        </div>
+      {% endif %}
+
+    </div>
+
+
+    <div class="about-story__horizontal-track">
+
+      <div class="about-story__horizontal-sticky">
+
+        <div
+          class="about-story__scroller"
+          aria-label="{{ section.settings.signature_heading | escape }}"
+        >
+
+          {% for block in pillar_blocks %}
+
+            <article
+              class="about-story__pillar"
+              {{ block.shopify_attributes }}
+            >
+
+              {% if block.settings.image != blank %}
+
+                <div class="about-story__pillar-image">
+
+                  {% render 'image',
+                    image: block.settings.image,
+                    section_index: section.index,
+                    image_per_view: 2
+                  %}
+
+                </div>
+
+              {% endif %}
+
+
+              <div class="about-story__pillar-number">
+
+                {% if block.settings.number != blank %}
+                  {{ block.settings.number }}
+                {% else %}
+                  0{{ forloop.index }}
+                {% endif %}
+
+              </div>
+
+
+              <div class="about-story__pillar-content">
+
+                {% if block.settings.heading != blank %}
+
+                  <h3 class="about-story__pillar-heading {{ block.settings.heading_size }}">
+                    {{ block.settings.heading }}
+                  </h3>
+
+                {% endif %}
+
+
+                {% if block.settings.text != blank %}
+
+                  <div class="about-story__richtext rte">
+                    {{ block.settings.text }}
+                  </div>
+
+                {% endif %}
+
+              </div>
+
+            </article>
+
+          {% endfor %}
+
+        </div>
+
+      </div>
+
+
+      <div class="about-story__slider-navigation">
+
+        <button
+          type="button"
+          class="about-story__slider-next"
+          aria-label="Voir la suite"
+        >
+          <span aria-hidden="true">→</span>
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+{% endif %}
+
+
+
+      {%- comment -%}
+        ================================================================
+        SERVICES
+        ================================================================
+      {%- endcomment -%}
+
+      {% if service_blocks.size > 0 or section.settings.services_heading != blank %}
+
+        <div class="about-story__services">
+
+
+          {%- comment -%}
+            Services — image
+          {%- endcomment -%}
+
+          {% if service_image_block != blank %}
+
+            <div
+              class="about-story__services-media"
+              style="
+                --services-image-position:
+                  {{ service_image_block.settings.image_position }};
+              "
+              {{ service_image_block.shopify_attributes }}
+            >
+
+              {% if service_image_block.settings.image != blank %}
+
+                {% render 'image',
+                  image: service_image_block.settings.image,
+                  section_index: section.index,
+                  image_per_view: 2
+                %}
+
+              {% else %}
+
+                {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+
+              {% endif %}
+
+            </div>
+
+
+          {% else %}
+
+            <div class="about-story__services-media">
+              {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+
+          {% endif %}
+
+
+
+          {%- comment -%}
+            Services — contenu
+          {%- endcomment -%}
+
+          <div class="about-story__services-content">
+
+            {% if section.settings.services_eyebrow != blank %}
+
+              <p class="about-story__eyebrow">
+                {{ section.settings.services_eyebrow }}
+              </p>
+
+            {% endif %}
+
+
+            {% if section.settings.services_heading != blank %}
+
+              <h2 class="about-story__services-heading {{ section.settings.services_heading_size }}">
+                {{ section.settings.services_heading }}
+              </h2>
+
+            {% endif %}
+
+
+            {% for block in service_blocks %}
+
+              <div
+                class="about-story__service"
+                {{ block.shopify_attributes }}
+              >
+
+                <span class="about-story__service-number">
+
+                  {% if block.settings.number != blank %}
+                    {{ block.settings.number }}
+                  {% else %}
+                    0{{ forloop.index }}
+                  {% endif %}
+
+                </span>
+
+
+                <div class="about-story__service-content">
+
+                  {% if block.settings.heading != blank %}
+
+                    <h3 class="about-story__service-heading {{ block.settings.heading_size }}">
+                      {{ block.settings.heading }}
+                    </h3>
+
+                  {% endif %}
+
+
+                  {% if block.settings.text != blank %}
+
+                    <div class="about-story__richtext rte">
+                      {{ block.settings.text }}
+                    </div>
+
+                  {% endif %}
+
+
+                  {% if block.settings.button_label != blank %}
+
+                    <div class="about-story__service-button">
+
+                      {% render 'button',
+                        type: 'link',
+                        class: 'button',
+                        button_style: block.settings.button_style,
+                        value: block.settings.button_label,
+                        href: block.settings.button_link
+                      %}
+
+                    </div>
+
+                  {% endif %}
+
+                </div>
+
+              </div>
+
+            {% endfor %}
+
+          </div>
+
+        </div>
+
+      {% endif %}
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+  (() => {
+    const section =
+      document.querySelector(
+        '#shopify-section-{{ section.id }}'
+      );
+
+    if (!section) return;
+
+
+    const track =
+      section.querySelector(
+        '.about-story__horizontal-track'
+      );
+
+    const sticky =
+      section.querySelector(
+        '.about-story__horizontal-sticky'
+      );
+
+    const scroller =
+      section.querySelector(
+        '.about-story__scroller'
+      );
+
+    const nextButton =
+      section.querySelector(
+        '.about-story__slider-next'
+      );
+
+
+    if (
+      !track ||
+      !sticky ||
+      !scroller
+    ) {
+      return;
+    }
+
+
+    let maxHorizontalScroll = 0;
+    let scrollDistance = 0;
+    let trackStart = 0;
+
+    let ticking = false;
+    let resizeTimeout = null;
+
+
+    /* ========================================================================
+       Helpers
+       ======================================================================== */
+
+    const clamp = (
+      value,
+      min,
+      max
+    ) => {
+      return Math.min(
+        Math.max(value, min),
+        max
+      );
+    };
+
+
+    const getHeaderHeight = () => {
+      const value =
+        getComputedStyle(section)
+          .getPropertyValue(
+            '--about-header-height'
+          );
+
+      return parseFloat(value) || 80;
+    };
+
+
+    /* ========================================================================
+       Desktop horizontal position
+       ======================================================================== */
+
+    const updateHorizontalScroll = () => {
+      ticking = false;
+
+
+      if (window.innerWidth < 990) {
+        return;
+      }
+
+
+      if (
+        maxHorizontalScroll <= 0 ||
+        scrollDistance <= 0
+      ) {
+        scroller.style.setProperty(
+          '--about-horizontal-x',
+          '0px'
+        );
+
+        return;
+      }
+
+
+      const progress =
+        clamp(
+          (
+            window.scrollY -
+            trackStart
+          ) /
+          scrollDistance,
+          0,
+          1
+        );
+
+
+      const translateX =
+        -maxHorizontalScroll *
+        progress;
+
+
+      scroller.style.setProperty(
+        '--about-horizontal-x',
+        `${translateX}px`
+      );
+    };
+
+
+    /* ========================================================================
+       Mobile next button
+       ======================================================================== */
+
+    const updateNextButton = () => {
+      if (!nextButton) {
+        return;
+      }
+
+
+      /*
+       * La flèche n'est utile que sur tablette/mobile.
+       */
+      if (window.innerWidth >= 990) {
+        nextButton.classList.remove(
+          'is-hidden'
+        );
+
+        return;
+      }
+
+
+      const maxScroll =
+        Math.max(
+          0,
+          scroller.scrollWidth -
+          scroller.clientWidth
+        );
+
+
+      /*
+       * Pas de contenu à faire défiler :
+       * on masque la flèche.
+       */
+      if (maxScroll <= 1) {
+        nextButton.classList.add(
+          'is-hidden'
+        );
+
+        return;
+      }
+
+
+      const isAtEnd =
+        scroller.scrollLeft >=
+        maxScroll - 10;
+
+
+      nextButton.classList.toggle(
+        'is-hidden',
+        isAtEnd
+      );
+    };
+
+
+    const scrollToNextCard = () => {
+      if (window.innerWidth >= 990) {
+        return;
+      }
+
+
+      const cards =
+        scroller.querySelectorAll(
+          '.about-story__pillar'
+        );
+
+
+      if (!cards.length) {
+        return;
+      }
+
+
+      /*
+       * On cherche la première carte située
+       * réellement après le bord gauche visible.
+       *
+       * C'est plus robuste qu'un scrollBy fixe
+       * si les cartes changent de largeur.
+       */
+      const currentScroll =
+        scroller.scrollLeft;
+
+
+      let targetScroll = null;
+
+
+      cards.forEach((card) => {
+        if (targetScroll !== null) {
+          return;
+        }
+
+
+        const cardLeft =
+          card.offsetLeft;
+
+
+        if (
+          cardLeft >
+          currentScroll + 10
+        ) {
+          targetScroll =
+            cardLeft;
+        }
+      });
+
+
+      /*
+       * Fallback :
+       * si aucune carte suivante n'est trouvée,
+       * on va jusqu'à la fin.
+       */
+      if (targetScroll === null) {
+        targetScroll =
+          scroller.scrollWidth -
+          scroller.clientWidth;
+      }
+
+
+      scroller.scrollTo({
+        left: targetScroll,
+        behavior: 'smooth'
+      });
+    };
+
+
+    /* ========================================================================
+       Dimensions
+       ======================================================================== */
+
+    const calculateDimensions = () => {
+
+      /*
+       * Mobile / tablette :
+       * le carousel reste natif.
+       */
+      if (window.innerWidth < 990) {
+
+        track.style.height = '';
+
+        scroller.style.removeProperty(
+          '--about-horizontal-x'
+        );
+
+
+        updateNextButton();
+
+        return;
+      }
+
+
+      /*
+       * Desktop :
+       * on repart proprement du mode natif.
+       */
+      scroller.scrollLeft = 0;
+
+
+      const stickyWidth =
+        sticky.clientWidth;
+
+
+      const stickyHeight =
+        sticky.clientHeight;
+
+
+      /*
+       * Distance horizontale totale.
+       */
+      maxHorizontalScroll =
+        Math.max(
+          0,
+          scroller.scrollWidth -
+          stickyWidth
+        );
+
+
+      /*
+       * 1px vertical ≈ 1px horizontal.
+       */
+      scrollDistance =
+        maxHorizontalScroll;
+
+
+      /*
+       * Hauteur nécessaire pour maintenir
+       * la zone sticky pendant tout le mouvement.
+       */
+      track.style.height =
+        `${
+          stickyHeight +
+          scrollDistance
+        }px`;
+
+
+      /*
+       * Position absolue du début du track.
+       */
+      const trackRect =
+        track.getBoundingClientRect();
+
+
+      trackStart =
+        window.scrollY +
+        trackRect.top -
+        getHeaderHeight();
+
+
+      updateHorizontalScroll();
+      updateNextButton();
+    };
+
+
+    /* ========================================================================
+       Events
+       ======================================================================== */
+
+    const handleScroll = () => {
+
+      if (ticking) return;
+
+
+      ticking = true;
+
+
+      requestAnimationFrame(
+        updateHorizontalScroll
+      );
+    };
+
+
+    const handleScrollerScroll = () => {
+
+      /*
+       * Seulement utile pour le carousel natif mobile.
+       */
+      if (window.innerWidth >= 990) {
+        return;
+      }
+
+
+      requestAnimationFrame(
+        updateNextButton
+      );
+    };
+
+
+    const handleResize = () => {
+
+      clearTimeout(
+        resizeTimeout
+      );
+
+
+      resizeTimeout =
+        setTimeout(
+          calculateDimensions,
+          150
+        );
+    };
+
+
+    /* ========================================================================
+       Button event
+       ======================================================================== */
+
+    if (nextButton) {
+
+      nextButton.addEventListener(
+        'click',
+        scrollToNextCard
+      );
+
+    }
+
+
+    /* ========================================================================
+       Init
+       ======================================================================== */
+
+    calculateDimensions();
+
+
+    window.addEventListener(
+      'scroll',
+      handleScroll,
+      {
+        passive: true
+      }
+    );
+
+
+    scroller.addEventListener(
+      'scroll',
+      handleScrollerScroll,
+      {
+        passive: true
+      }
+    );
+
+
+    window.addEventListener(
+      'resize',
+      handleResize,
+      {
+        passive: true
+      }
+    );
+
+
+    /*
+     * Recalcul une fois toutes les images chargées.
+     */
+    window.addEventListener(
+      'load',
+      () => {
+        calculateDimensions();
+        updateNextButton();
+      },
+      {
+        once: true
+      }
+    );
+
+
+    /* ========================================================================
+       Shopify Theme Editor
+       ======================================================================== */
+
+    if (
+      typeof Shopify !== 'undefined' &&
+      Shopify.designMode
+    ) {
+
+      document.addEventListener(
+        'shopify:block:select',
+        calculateDimensions
+      );
+
+
+      document.addEventListener(
+        'shopify:section:load',
+        calculateDimensions
+      );
+
+    }
+  })();
+</script>
+
+
+{% schema %}
+{
+  "name": "About story",
+  "tag": "section",
+
+  "settings": [
+    {
+      "type": "header",
+      "content": "Introduction"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "intro_eyebrow",
+      "label": "Subheading",
+      "default": "Essential Dresses"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "intro_heading",
+      "label": "Heading",
+      "default": "Une marque belge née d’une passion commune pour les silhouettes, les matières et le détail."
+    },
+    {
+      "type": "select",
+      "id": "intro_heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "h6",
+          "label": "XS"
+        },
+        {
+          "value": "h5",
+          "label": "S"
+        },
+        {
+          "value": "h4",
+          "label": "M"
+        },
+        {
+          "value": "h3",
+          "label": "L"
+        },
+        {
+          "value": "h2",
+          "label": "XL"
+        }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "richtext",
+      "id": "intro_text",
+      "label": "Text",
+      "default": "<p>Fondée par trois sœurs passionnées par la mode, Essential Dresses imagine des pièces contemporaines où chaque détail compte.</p>"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Mission"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "story_eyebrow",
+      "label": "Subheading",
+      "default": "Notre vision"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "story_heading",
+      "label": "Heading",
+      "default": "Notre <em>mission</em>"
+    },
+    {
+      "type": "select",
+      "id": "story_heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "h6",
+          "label": "XS"
+        },
+        {
+          "value": "h5",
+          "label": "S"
+        },
+        {
+          "value": "h4",
+          "label": "M"
+        },
+        {
+          "value": "h3",
+          "label": "L"
+        },
+        {
+          "value": "h2",
+          "label": "XL"
+        }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "richtext",
+      "id": "story_text",
+      "label": "Text",
+      "default": "<p>Offrir des robes qui subliment chaque femme grâce à des silhouettes modernes, structurées et intemporelles.</p><p>Chaque création est pensée autour d’un équilibre précis entre caractère, qualité des matières et sophistication.</p>"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Signature"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "signature_eyebrow",
+      "label": "Subheading",
+      "default": "Notre signature"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "signature_heading",
+      "label": "Heading",
+      "default": "Le détail comme ligne directrice."
+    },
+    {
+      "type": "select",
+      "id": "signature_heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "h6",
+          "label": "XS"
+        },
+        {
+          "value": "h5",
+          "label": "S"
+        },
+        {
+          "value": "h4",
+          "label": "M"
+        },
+        {
+          "value": "h3",
+          "label": "L"
+        },
+        {
+          "value": "h2",
+          "label": "XL"
+        }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "richtext",
+      "id": "signature_text",
+      "label": "Text",
+      "default": "<p>Trois éléments définissent le langage d’Essential Dresses et donnent à chaque silhouette son caractère.</p>"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Services"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "services_eyebrow",
+      "label": "Subheading",
+      "default": "L’expérience Essential Dresses"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "services_heading",
+      "label": "Heading",
+      "default": "Deux façons de vivre <em>Essential Dresses</em>"
+    },
+    {
+      "type": "select",
+      "id": "services_heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "h6",
+          "label": "XS"
+        },
+        {
+          "value": "h5",
+          "label": "S"
+        },
+        {
+          "value": "h4",
+          "label": "M"
+        },
+        {
+          "value": "h3",
+          "label": "L"
+        },
+        {
+          "value": "h2",
+          "label": "XL"
+        }
+      ],
+      "default": "h2"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Settings"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "max-w-page",
+          "label": "Page"
+        },
+        {
+          "value": "max-w-narrower",
+          "label": "Narrower"
+        },
+        {
+          "value": "max-w-fluid",
+          "label": "Fluid"
+        },
+        {
+          "value": "max-w-full",
+          "label": "Full"
+        }
+      ],
+      "default": "max-w-page"
+    },
+    {
+      "type": "select",
+      "id": "spacing_top",
+      "label": "Top spacing",
+      "options": [
+        {
+          "value": "0",
+          "label": "No"
+        },
+        {
+          "value": "1",
+          "label": "S"
+        },
+        {
+          "value": "2",
+          "label": "M"
+        },
+        {
+          "value": "4",
+          "label": "L"
+        },
+        {
+          "value": "6",
+          "label": "XL"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "spacing_bottom",
+      "label": "Bottom spacing",
+      "options": [
+        {
+          "value": "0",
+          "label": "No"
+        },
+        {
+          "value": "1",
+          "label": "S"
+        },
+        {
+          "value": "2",
+          "label": "M"
+        },
+        {
+          "value": "4",
+          "label": "L"
+        },
+        {
+          "value": "6",
+          "label": "XL"
+        }
+      ],
+      "default": "4"
+    }
+  ],
+
+
+  "blocks": [
+    {
+      "type": "story_image",
+      "name": "Mission image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Image size",
+          "options": [
+            {
+              "value": "large",
+              "label": "Large"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "value": "small",
+              "label": "Small"
+            }
+          ],
+          "default": "large"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "select",
+          "id": "aspect_ratio",
+          "label": "Aspect ratio",
+          "options": [
+            {
+              "value": "1 / 1",
+              "label": "1:1"
+            },
+            {
+              "value": "4 / 3",
+              "label": "4:3"
+            },
+            {
+              "value": "3 / 4",
+              "label": "3:4"
+            },
+            {
+              "value": "3 / 2",
+              "label": "3:2"
+            },
+            {
+              "value": "2 / 3",
+              "label": "2:3"
+            },
+            {
+              "value": "16 / 9",
+              "label": "16:9"
+            }
+          ],
+          "default": "4 / 3"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption"
+        }
+      ]
+    },
+
+
+    {
+      "type": "pillar",
+      "name": "Signature pillar",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Les corsets"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            {
+              "value": "h6",
+              "label": "XS"
+            },
+            {
+              "value": "h5",
+              "label": "S"
+            },
+            {
+              "value": "h4",
+              "label": "M"
+            },
+            {
+              "value": "h3",
+              "label": "L"
+            },
+            {
+              "value": "h2",
+              "label": "XL"
+            }
+          ],
+          "default": "h3"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Des corsets parfaitement maîtrisés, qui sculptent la silhouette avec précision.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+
+
+    {
+      "type": "service_image",
+      "name": "Services image",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image position",
+          "options": [
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        }
+      ]
+    },
+
+
+    {
+      "type": "service",
+      "name": "Service",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "La location"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            {
+              "value": "h6",
+              "label": "XS"
+            },
+            {
+              "value": "h5",
+              "label": "S"
+            },
+            {
+              "value": "h4",
+              "label": "M"
+            },
+            {
+              "value": "h3",
+              "label": "L"
+            },
+            {
+              "value": "h2",
+              "label": "XL"
+            }
+          ],
+          "default": "h4"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Porter une robe d’exception le temps d’un événement.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "options": [
+            {
+              "value": "button--filled",
+              "label": "Filled"
+            },
+            {
+              "value": "button--outlined",
+              "label": "Outlined"
+            },
+            {
+              "value": "button--text",
+              "label": "Text"
+            }
+          ],
+          "default": "button--text"
+        }
+      ]
+    }
+  ],
+
+
+  "presets": [
+    {
+      "name": "About story",
+      "blocks": [
+        {
+          "type": "story_image",
+          "settings": {
+            "size": "large",
+            "alignment": "right",
+            "aspect_ratio": "4 / 3"
+          }
+        },
+        {
+          "type": "story_image",
+          "settings": {
+            "size": "medium",
+            "alignment": "left",
+            "aspect_ratio": "3 / 4"
+          }
+        },
+
+
+        {
+          "type": "pillar",
+          "settings": {
+            "number": "01",
+            "heading": "Les corsets",
+            "text": "<p>Des corsets parfaitement maîtrisés, qui sculptent la silhouette avec précision.</p>"
+          }
+        },
+        {
+          "type": "pillar",
+          "settings": {
+            "number": "02",
+            "heading": "Les épaulettes",
+            "text": "<p>Des épaulettes élégantes qui apportent structure, maintien et caractère.</p>"
+          }
+        },
+        {
+          "type": "pillar",
+          "settings": {
+            "number": "03",
+            "heading": "Les matières",
+            "text": "<p>Des tissus haut de gamme et des finitions sélectionnées pour leur qualité, leur douceur et leur tombé.</p>"
+          }
+        },
+
+
+        {
+          "type": "service_image"
+        },
+
+
+        {
+          "type": "service",
+          "settings": {
+            "number": "01",
+            "heading": "La location",
+            "text": "<p>Porter une robe d’exception le temps d’un événement, dans notre showroom à Bruxelles.</p>",
+            "button_label": "Découvrir la location",
+            "button_style": "button--text"
+          }
+        },
+        {
+          "type": "service",
+          "settings": {
+            "number": "02",
+            "heading": "Le sur-mesure",
+            "text": "<p>Une création entièrement personnalisée, accessible à Bruxelles comme à distance grâce à notre processus digitalisé.</p>",
+            "button_label": "Découvrir le sur-mesure",
+            "button_style": "button--text"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

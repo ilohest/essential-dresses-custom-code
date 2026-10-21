@@ -1,0 +1,587 @@
+{% liquid
+  assign default_address_query = shop.address.address1 | append: ',' | append: shop.address.city | append: ' ' | append: shop.address.province
+  assign address = section.settings.address_query | default: default_address_query
+%}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --contact-map-radius: {{ section.settings.border_radius | divided_by: 10 }}rem;
+
+    --contact-map-spacing-top:
+      calc(var(--section-spacing-unit-size) * {{ section.settings.spacing_top }});
+
+    --contact-map-spacing-bottom:
+      calc(var(--section-spacing-unit-size) * {{ section.settings.spacing_bottom }});
+
+    --contact-map-header-height: var(--header-height, 0px);
+  }
+
+  #shopify-section-{{ section.id }} > div {
+    padding-block-start: var(--contact-map-spacing-top);
+    padding-block-end: var(--contact-map-spacing-bottom);
+  }
+
+
+  /* ==========================================================================
+     LAYOUT
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .contact-map {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(380px, 1fr);
+    align-items: start;
+    width: 100%;
+  }
+
+
+  /* ==========================================================================
+     MAP
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .contact-map__map-column {
+    position: relative;
+    height: 100%;
+    min-width: 0;
+  }
+
+  #shopify-section-{{ section.id }} .contact-map__map-sticky {
+    position: sticky;
+
+    top: calc(
+      var(--contact-map-header-height) +
+      var(--contact-map-spacing-top)
+    );
+
+    height: calc(
+      100vh -
+      var(--contact-map-header-height) -
+      var(--contact-map-spacing-top) -
+      var(--contact-map-spacing-bottom)
+    );
+
+    min-height: 500px;
+  }
+
+  #shopify-section-{{ section.id }} .contact-map__map-sticky iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: var(--contact-map-radius);
+  }
+
+
+  /* ==========================================================================
+     CONTENT
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .contact-map__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    min-height: 120vh;
+
+    padding:
+      clamp(64px, 8vw, 140px)
+      clamp(32px, 6vw, 100px);
+  }
+
+  #shopify-section-{{ section.id }} .contact-map__inner {
+    width: 100%;
+    max-width: 520px;
+    margin-inline: auto;
+  }
+
+
+  /* ==========================================================================
+     HEADING
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .contact-map__eyebrow {
+    margin: 0 0 16px;
+    opacity: 0.55;
+  }
+
+  #shopify-section-{{ section.id }} .contact-map__title {
+    margin: 0 0 clamp(56px, 7vw, 100px);
+  }
+
+
+  /* ==========================================================================
+     INFORMATION BLOCKS
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .contact-map__block {
+    padding-block: clamp(32px, 4vw, 56px);
+    border-top: 1px solid rgba(var(--color-foreground), 0.18);
+  }
+
+  #shopify-section-{{ section.id }} .contact-map__block:last-of-type {
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.18);
+  }
+
+  #shopify-section-{{ section.id }} .contact-map__block-title {
+    margin: 0 0 20px;
+  }
+
+  #shopify-section-{{ section.id }} .contact-map__text {
+    opacity: 0.7;
+  }
+
+  #shopify-section-{{ section.id }} .contact-map__text p {
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+
+  #shopify-section-{{ section.id }} .contact-map__text p:last-child {
+    margin-bottom: 0;
+  }
+
+  #shopify-section-{{ section.id }} .contact-map__text a {
+    color: inherit;
+    text-underline-offset: 4px;
+  }
+
+
+  /* ==========================================================================
+     BUTTON
+     ========================================================================== */
+
+  #shopify-section-{{ section.id }} .contact-map__button-wrapper {
+    margin-top: clamp(48px, 6vw, 80px);
+  }
+
+
+  /* ==========================================================================
+     TABLET / MOBILE
+     ========================================================================== */
+
+  @media screen and (max-width: 989px) {
+    #shopify-section-{{ section.id }} .contact-map {
+      grid-template-columns: 1fr;
+    }
+
+    #shopify-section-{{ section.id }} .contact-map__map-sticky {
+      position: relative;
+      top: auto;
+
+      height: 60vh;
+      min-height: 420px;
+    }
+
+    #shopify-section-{{ section.id }} .contact-map__content {
+      min-height: auto;
+
+      padding:
+        clamp(56px, 10vw, 90px)
+        clamp(20px, 6vw, 48px);
+    }
+
+    #shopify-section-{{ section.id }} .contact-map__inner {
+      max-width: none;
+    }
+
+    #shopify-section-{{ section.id }} .contact-map__title {
+      margin-bottom: 56px;
+    }
+  }
+{% endstyle %}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+
+  <div class="container {{ section.settings.section_width }}">
+
+    <div class="contact-map">
+
+      {% if section.settings.api_key != blank %}
+        <div class="contact-map__map-column">
+
+          <div class="contact-map__map-sticky">
+
+            <iframe
+              loading="lazy"
+              allowfullscreen
+              referrerpolicy="no-referrer-when-downgrade"
+              title="{{ section.settings.map_title | escape }}"
+              src="https://www.google.com/maps/embed/v1/place?key={{ section.settings.api_key }}&q={{ address | url_encode }}&zoom={{ section.settings.zoom_level }}"
+            >
+            </iframe>
+
+          </div>
+
+        </div>
+      {% endif %}
+
+
+      <div class="contact-map__content">
+
+        <div class="contact-map__inner">
+
+          {% if section.settings.eyebrow != blank %}
+            <div class="contact-map__eyebrow">
+              {{ section.settings.eyebrow }}
+            </div>
+          {% endif %}
+
+
+          {% if section.settings.heading != blank %}
+            <h1 class="contact-map__title {{ section.settings.heading_size }}">
+              {{ section.settings.heading }}
+            </h1>
+          {% endif %}
+
+
+          {% for block in section.blocks %}
+
+            <div
+              class="contact-map__block"
+              {{ block.shopify_attributes }}
+            >
+
+              {% if block.settings.heading != blank %}
+                <h2 class="contact-map__block-title {{ block.settings.heading_size }}">
+                  {{ block.settings.heading }}
+                </h2>
+              {% endif %}
+
+
+              {% if block.settings.text != blank %}
+                <div class="contact-map__text rte">
+                  {{ block.settings.text }}
+                </div>
+              {% endif %}
+
+            </div>
+
+          {% endfor %}
+
+
+          {% if section.settings.button_label != blank %}
+
+            <div class="contact-map__button-wrapper">
+
+              {% render 'button',
+                type: 'link',
+                class: 'button contact-map__button',
+                button_style: section.settings.button_style,
+                value: section.settings.button_label,
+                href: section.settings.button_link
+              %}
+
+            </div>
+
+          {% endif %}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+{% schema %}
+{
+  "name": "Contact + map",
+  "tag": "section",
+
+  "settings": [
+    {
+      "type": "header",
+      "content": "Map"
+    },
+    {
+      "type": "textarea",
+      "id": "api_key",
+      "label": "t:sections.map.settings.api_key.label",
+      "info": "t:sections.map.settings.api_key.info"
+    },
+    {
+      "type": "text",
+      "id": "address_query",
+      "label": "t:sections.map.settings.address.label",
+      "info": "t:sections.map.settings.address.info"
+    },
+    {
+      "type": "text",
+      "id": "map_title",
+      "label": "Map accessible title",
+      "default": "Essential Dresses à Bruxelles"
+    },
+    {
+      "type": "range",
+      "id": "zoom_level",
+      "min": 0,
+      "max": 21,
+      "step": 1,
+      "label": "t:sections.map.settings.zoom_level.label",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Map border radius",
+      "default": 0
+    },
+
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Bruxelles"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "t:sections.global.element.heading.label",
+      "default": "Nous rendre visite"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "t:sections.global.element.heading_size.label",
+      "options": [
+        {
+          "value": "h6",
+          "label": "XS"
+        },
+        {
+          "value": "h5",
+          "label": "S"
+        },
+        {
+          "value": "h4",
+          "label": "M"
+        },
+        {
+          "value": "h3",
+          "label": "L"
+        },
+        {
+          "value": "h2",
+          "label": "XL"
+        }
+      ],
+      "default": "h2"
+    },
+
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:sections.global.element.button_label.label",
+      "info": "t:sections.global.element.button_label.info"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:sections.global.element.button.link.label"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "t:sections.global.element.button.style.label",
+      "options": [
+        {
+          "value": "button--filled",
+          "label": "t:sections.global.element.button.style.options.filled.label"
+        },
+        {
+          "value": "button--outlined",
+          "label": "t:sections.global.element.button.style.options.outlined.label"
+        },
+        {
+          "value": "button--text",
+          "label": "t:sections.global.element.button.style.options.text.label"
+        }
+      ],
+      "default": "button--filled"
+    },
+
+    {
+      "type": "header",
+      "content": "t:sections.global.header.settings.content",
+      "info": "t:sections.global.header.settings.info"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-1",
+      "label": "t:sections.global.color_scheme.label"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:sections.global.settings.section_width.label",
+      "options": [
+        {
+          "value": "max-w-page",
+          "label": "t:sections.global.section_width.options.page.label"
+        },
+        {
+          "value": "max-w-narrower",
+          "label": "t:sections.global.section_width.options.narrower.label"
+        },
+        {
+          "value": "max-w-fluid",
+          "label": "t:sections.global.section_width.options.fluid.label"
+        },
+        {
+          "value": "max-w-full",
+          "label": "t:sections.global.section_width.options.full.label"
+        }
+      ],
+      "default": "max-w-full"
+    },
+    {
+      "type": "select",
+      "id": "spacing_top",
+      "label": "t:sections.global.settings.spacing.settings.spacing_top.label",
+      "options": [
+        {
+          "value": "0",
+          "label": "No"
+        },
+        {
+          "value": "1",
+          "label": "S"
+        },
+        {
+          "value": "2",
+          "label": "M"
+        },
+        {
+          "value": "4",
+          "label": "L"
+        },
+        {
+          "value": "6",
+          "label": "XL"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "spacing_bottom",
+      "label": "t:sections.global.settings.spacing.settings.spacing_bottom.label",
+      "options": [
+        {
+          "value": "0",
+          "label": "No"
+        },
+        {
+          "value": "1",
+          "label": "S"
+        },
+        {
+          "value": "2",
+          "label": "M"
+        },
+        {
+          "value": "4",
+          "label": "L"
+        },
+        {
+          "value": "6",
+          "label": "XL"
+        }
+      ],
+      "default": "2"
+    }
+  ],
+
+  "blocks": [
+    {
+      "type": "information",
+      "name": "Information",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "t:sections.global.element.heading.label",
+          "default": "Heures d’ouverture"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "t:sections.global.element.heading_size.label",
+          "options": [
+            {
+              "value": "h6",
+              "label": "XS"
+            },
+            {
+              "value": "h5",
+              "label": "S"
+            },
+            {
+              "value": "h4",
+              "label": "M"
+            },
+            {
+              "value": "h3",
+              "label": "L"
+            },
+            {
+              "value": "h2",
+              "label": "XL"
+            }
+          ],
+          "default": "h4"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:sections.global.element.text.label",
+          "default": "<p>Sur rendez-vous uniquement.</p>"
+        }
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Custom map",
+      "blocks": [
+        {
+          "type": "information",
+          "settings": {
+            "heading": "Heures d’ouverture",
+            "text": "<p>Sur rendez-vous uniquement.</p><p>Du lundi au vendredi : 11:00 – 14:00 et 17:00 – 19:00</p><p>Samedi et dimanche : 12:00 – 18:00</p>"
+          }
+        },
+        {
+          "type": "information",
+          "settings": {
+            "heading": "Contact",
+            "text": "<p><a href=\"tel:+32484752765\">+32 484 752 765</a></p><p><a href=\"mailto:essential.dresses@hotmail.com\">essential.dresses@hotmail.com</a></p>"
+          }
+        },
+        {
+          "type": "information",
+          "settings": {
+            "heading": "Adresse",
+            "text": "<p>7 Rue des Ateliers<br>1080 Bruxelles</p><p>Parking disponible.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
