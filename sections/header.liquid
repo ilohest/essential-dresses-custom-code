@@ -156,9 +156,57 @@
   cursor: pointer;
   padding: 8px 4px;
   max-width: 130px;
+  text-transform: uppercase;
 }
   /* ==========================================================================
    CUSTOM END — SELECTEUR DE LANGUES
+   ========================================================================== */
+
+  /* ==========================================================================
+   CUSTOM START — BOUTON PRISE DE RENDEZ-VOUS
+   ========================================================================== */
+  /* Le style visuel vient des classes .button du thème (comme partout sur le site).
+     On garantit seulement que le libellé ne passe pas sur deux lignes. */
+  #shopify-section-{{ section.id }} .header-appointment-button {
+    white-space: nowrap;
+  }
+
+  /* Dans la barre du header (ordinateur), le bouton suit la couleur du texte du header :
+     blanc sur header transparent, noir une fois scrollé — comme « FR » et les icônes.
+     currentColor = couleur héritée du <li>, donc aucune dépendance aux classes d'état du thème. */
+  /* .header a « color: rgb(var(--color-foreground)) » (section-header.css) et l'état transparent
+     change cette couleur. On hérite donc de la couleur courante plutôt que d'une variable précise :
+     ça marche que le thème bascule --color-foreground ou directement « color ». */
+  #shopify-section-{{ section.id }} .header__utils .header-appointment-button,
+  #shopify-section-{{ section.id }} .header__utils .header-appointment-button * {
+    color: inherit;
+  }
+  #shopify-section-{{ section.id }} .header__utils .header-appointment-button {
+    background-color: transparent;
+    border-color: currentColor;
+    transition: background-color var(--duration-default, 0.2s);
+  }
+  #shopify-section-{{ section.id }} .header__utils .header-appointment-button:hover,
+  #shopify-section-{{ section.id }} .header__utils .header-appointment-button:focus-visible {
+    background-color: color-mix(in srgb, currentColor 10%, transparent);
+  }
+  /* ==========================================================================
+   CUSTOM END — BOUTON PRISE DE RENDEZ-VOUS
+   ========================================================================== */
+
+  /* ==========================================================================
+   CUSTOM START — APPOINTO : CALENDRIER INTÉGRÉ SOUS LE HEADER
+   L'app Appointo met z-index: 1000 sur .appointo-modal-content, y compris quand
+   le calendrier est intégré dans la page (.appointo-modal-content-embed).
+   Le header du thème est à --z-header (800) : le calendrier passait donc
+   par-dessus le header sticky et le méga-menu. On ne cible que la version
+   intégrée, pour laisser la version pop-up d'Appointo au premier plan.
+   ========================================================================== */
+  .appointo-modal-content.appointo-modal-content-embed {
+    z-index: 1;
+  }
+  /* ==========================================================================
+   CUSTOM END — APPOINTO : CALENDRIER INTÉGRÉ SOUS LE HEADER
    ========================================================================== */
 {%- endstyle -%}
 
@@ -553,6 +601,26 @@
             {%- endif -%}
             {% endcomment %}
 
+            {% comment %} START CUSTOM : bouton de prise de rendez-vous {% endcomment %}
+            {%- if section.settings.appointment_button_show and section.settings.appointment_button_label != blank -%}
+              {%- liquid
+                assign appointment_url = section.settings.appointment_button_url
+                if appointment_url == blank
+                  assign appointment_url = pages['rental-agenda'].url | default: '/pages/rental-agenda'
+                endif
+              -%}
+              <li class="header__utils-item header-appointment-item small-hide medium-hide">
+                {% render 'button',
+                  type: 'link',
+                  class: 'button header-appointment-button',
+                  button_style: section.settings.appointment_button_style,
+                  value: section.settings.appointment_button_label,
+                  href: appointment_url
+                %}
+              </li>
+            {%- endif -%}
+            {% comment %} END CUSTOM : bouton de prise de rendez-vous {% endcomment %}
+
             {% comment %} START CUSTOM : afficher un sélecteru de langues {% endcomment %}
             {%- if localization.available_languages.size > 1 -%}
               {%- comment -%}
@@ -579,7 +647,7 @@
                           selected
                         {% endif %}
                       >
-                        {{ language.endonym_name | capitalize }}
+                        {{ language.iso_code | split: '-' | first | downcase }}
                       </option>
                     {%- endfor -%}
                   </select>
@@ -809,6 +877,47 @@
       "id": "transparent_header_bottom_border",
       "label": "t:sections.header.settings.transparent_header_bottom_border.label",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "Bouton prise de rendez-vous"
+    },
+    {
+      "type": "checkbox",
+      "id": "appointment_button_show",
+      "label": "Afficher le bouton",
+      "info": "Affiché sur ordinateur, à gauche du sélecteur de langue.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "appointment_button_label",
+      "label": "t:sections.global.element.button_label.label",
+      "info": "Saisir la version anglaise ici. La version française se renseigne dans Translate & Adapt > Thème > Groupes de sections > Header.",
+      "default": "Request an appointment"
+    },
+    {
+      "type": "url",
+      "id": "appointment_button_url",
+      "label": "Lien du bouton",
+      "info": "Si vide, le bouton mène à la page « rental-agenda »."
+    },
+    {
+      "type": "select",
+      "id": "appointment_button_style",
+      "label": "t:sections.global.element.button.style.label",
+      "info": "Sur ordinateur, le bouton suit la couleur du header (blanc sur header transparent, noir après scroll).",
+      "options": [
+        {
+          "value": "button--outlined",
+          "label": "t:sections.global.element.button.style.options.outlined.label"
+        },
+        {
+          "value": "button--text",
+          "label": "t:sections.global.element.button.style.options.text.label"
+        }
+      ],
+      "default": "button--outlined"
     },
     {
       "type": "header",

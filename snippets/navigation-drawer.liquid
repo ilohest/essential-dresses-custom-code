@@ -236,6 +236,35 @@
       {%- endif -%}
 
       <div class="drawer__row drawer__row--bottom">
+        {%- comment -%}
+          start custom — Bouton de prise de rendez-vous dans le menu mobile.
+          Réutilise les réglages « Bouton prise de rendez-vous » de la section Header
+          (texte traduisible, lien, style) pour rester synchronisé avec l'ordinateur.
+        {%- endcomment -%}
+        {%- if section.settings.appointment_button_show and section.settings.appointment_button_label != blank -%}
+          {%- liquid
+            assign drawer_appointment_url = section.settings.appointment_button_url
+            if drawer_appointment_url == blank
+              assign drawer_appointment_url = pages['rental-agenda'].url | default: '/pages/rental-agenda'
+            endif
+          -%}
+          {%- style -%}
+            .drawer__appointment {
+              margin-bottom: 2.4rem;
+            }
+          {%- endstyle -%}
+          <div class="drawer__appointment large-up-hide">
+            {% render 'button',
+              type: 'link',
+              class: 'button button--full',
+              button_style: section.settings.appointment_button_style,
+              value: section.settings.appointment_button_label,
+              href: drawer_appointment_url
+            %}
+          </div>
+        {%- endif -%}
+        {%- comment -%} end custom {%- endcomment -%}
+
         <nav class="drawer__subs">
           <ul class="drawer__subs-items list-unstyled">
             <li class="drawer__subs-item">
@@ -275,7 +304,7 @@
                           selected
                         {% endif %}
                       >
-                        {{ language.endonym_name | capitalize | escape }}
+                        {{ language.iso_code | split: '-' | first | downcase | escape }}
                       </option>
                     {%- endfor -%}
                   </select>
