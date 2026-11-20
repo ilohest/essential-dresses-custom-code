@@ -191,19 +191,15 @@
     width: 100%;
   }
 
+  /*
+   * Masonry en colonnes CSS : fonctionne avec n'importe quel nombre
+   * d'images, chaque image garde le format choisi dans son bloc.
+   */
   #shopify-section-{{ section.id }} .rental-story__gallery-grid {
-    display: grid;
-
-    grid-template-columns:
-      repeat(12, minmax(0, 1fr));
+    columns: 3;
 
     column-gap:
-      clamp(18px, 3vw, 52px);
-
-    row-gap:
-      clamp(80px, 10vw, 160px);
-
-    align-items: start;
+      clamp(14px, 2vw, 32px);
   }
 
   #shopify-section-{{ section.id }} .rental-story__gallery-item {
@@ -211,93 +207,12 @@
 
     min-width: 0;
 
-    margin: 0;
-  }
+    margin:
+      0
+      0
+      clamp(14px, 2vw, 32px);
 
-
-  /* --------------------------------------------------------------------------
-     Large
-     -------------------------------------------------------------------------- */
-
-  #shopify-section-{{ section.id }}
-  .rental-story__gallery-item--large.rental-story__gallery-item--left {
-    grid-column:
-      1 / span 5;
-  }
-
-  #shopify-section-{{ section.id }}
-  .rental-story__gallery-item--large.rental-story__gallery-item--center {
-    grid-column:
-      4 / span 6;
-  }
-
-  #shopify-section-{{ section.id }}
-  .rental-story__gallery-item--large.rental-story__gallery-item--right {
-    grid-column:
-      8 / span 5;
-  }
-
-
-  /* --------------------------------------------------------------------------
-     Medium
-     -------------------------------------------------------------------------- */
-
-  #shopify-section-{{ section.id }}
-  .rental-story__gallery-item--medium.rental-story__gallery-item--left {
-    grid-column:
-      1 / span 4;
-  }
-
-  #shopify-section-{{ section.id }}
-  .rental-story__gallery-item--medium.rental-story__gallery-item--center {
-    grid-column:
-      5 / span 4;
-  }
-
-  #shopify-section-{{ section.id }}
-  .rental-story__gallery-item--medium.rental-story__gallery-item--right {
-    grid-column:
-      9 / span 4;
-  }
-
-
-  /* --------------------------------------------------------------------------
-     Small
-     -------------------------------------------------------------------------- */
-
-  #shopify-section-{{ section.id }}
-  .rental-story__gallery-item--small.rental-story__gallery-item--left {
-    grid-column:
-      1 / span 3;
-  }
-
-  #shopify-section-{{ section.id }}
-  .rental-story__gallery-item--small.rental-story__gallery-item--center {
-    grid-column:
-      6 / span 3;
-  }
-
-  #shopify-section-{{ section.id }}
-  .rental-story__gallery-item--small.rental-story__gallery-item--right {
-    grid-column:
-      10 / span 3;
-  }
-
-
-  /* --------------------------------------------------------------------------
-     Rhythm
-     -------------------------------------------------------------------------- */
-
-  #shopify-section-{{ section.id }}
-  .rental-story__gallery-item:nth-child(2n) {
-    margin-top:
-      clamp(24px, 4vw, 64px);
-  }
-
-  #shopify-section-{{ section.id }}
-  .rental-story__gallery-item:nth-child(3n) {
-    margin-top:
-      clamp(8px, 2vw, 28px);
+    break-inside: avoid;
   }
 
 
@@ -310,13 +225,6 @@
 
     aspect-ratio:
       var(--rental-gallery-ratio, 4 / 5);
-
-    max-height:
-      calc(
-        100svh -
-        var(--header-height, 80px) -
-        80px
-      );
 
     overflow: hidden;
   }
@@ -688,6 +596,10 @@
 
   @media screen and (max-width: 989px) {
 
+    #shopify-section-{{ section.id }} .rental-story__gallery-grid {
+      columns: 2;
+    }
+
     #shopify-section-{{ section.id }} .rental-story__container {
       gap: 110px;
     }
@@ -769,85 +681,13 @@
        ------------------------------------------------------------------------ */
 
     #shopify-section-{{ section.id }} .rental-story__gallery-grid {
-      grid-template-columns:
-        repeat(12, minmax(0, 1fr));
+      columns: 2;
 
       column-gap: 8px;
-
-      row-gap: 68px;
     }
 
-
-    /* Large */
-
-    #shopify-section-{{ section.id }}
-    .rental-story__gallery-item--large.rental-story__gallery-item--left {
-      grid-column:
-        1 / span 10;
-    }
-
-    #shopify-section-{{ section.id }}
-    .rental-story__gallery-item--large.rental-story__gallery-item--center {
-      grid-column:
-        2 / span 10;
-    }
-
-    #shopify-section-{{ section.id }}
-    .rental-story__gallery-item--large.rental-story__gallery-item--right {
-      grid-column:
-        3 / span 10;
-    }
-
-
-    /* Medium */
-
-    #shopify-section-{{ section.id }}
-    .rental-story__gallery-item--medium.rental-story__gallery-item--left {
-      grid-column:
-        1 / span 8;
-    }
-
-    #shopify-section-{{ section.id }}
-    .rental-story__gallery-item--medium.rental-story__gallery-item--center {
-      grid-column:
-        3 / span 8;
-    }
-
-    #shopify-section-{{ section.id }}
-    .rental-story__gallery-item--medium.rental-story__gallery-item--right {
-      grid-column:
-        5 / span 8;
-    }
-
-
-    /* Small */
-
-    #shopify-section-{{ section.id }}
-    .rental-story__gallery-item--small.rental-story__gallery-item--left {
-      grid-column:
-        1 / span 6;
-    }
-
-    #shopify-section-{{ section.id }}
-    .rental-story__gallery-item--small.rental-story__gallery-item--center {
-      grid-column:
-        4 / span 6;
-    }
-
-    #shopify-section-{{ section.id }}
-    .rental-story__gallery-item--small.rental-story__gallery-item--right {
-      grid-column:
-        7 / span 6;
-    }
-
-    #shopify-section-{{ section.id }}
-    .rental-story__gallery-item:nth-child(2n) {
-      margin-top: 26px;
-    }
-
-    #shopify-section-{{ section.id }}
-    .rental-story__gallery-item:nth-child(3n) {
-      margin-top: 0;
+    #shopify-section-{{ section.id }} .rental-story__gallery-item {
+      margin-bottom: 8px;
     }
 
 
@@ -1022,11 +862,7 @@
             {% for block in editorial_image_blocks %}
 
               <figure
-                class="
-                  rental-story__gallery-item
-                  rental-story__gallery-item--{{ block.settings.size }}
-                  rental-story__gallery-item--{{ block.settings.alignment }}
-                "
+                class="rental-story__gallery-item"
                 {{ block.shopify_attributes }}
               >
 
@@ -2020,46 +1856,6 @@
         },
         {
           "type": "select",
-          "id": "size",
-          "label": "Size",
-          "options": [
-            {
-              "value": "large",
-              "label": "Large"
-            },
-            {
-              "value": "medium",
-              "label": "Medium"
-            },
-            {
-              "value": "small",
-              "label": "Small"
-            }
-          ],
-          "default": "medium"
-        },
-        {
-          "type": "select",
-          "id": "alignment",
-          "label": "Alignment",
-          "options": [
-            {
-              "value": "left",
-              "label": "Left"
-            },
-            {
-              "value": "center",
-              "label": "Center"
-            },
-            {
-              "value": "right",
-              "label": "Right"
-            }
-          ],
-          "default": "center"
-        },
-        {
-          "type": "select",
           "id": "aspect_ratio",
           "label": "Format",
           "options": [
@@ -2284,24 +2080,18 @@
         {
           "type": "editorial_image",
           "settings": {
-            "size": "medium",
-            "alignment": "left",
             "aspect_ratio": "3 / 4"
           }
         },
         {
           "type": "editorial_image",
           "settings": {
-            "size": "large",
-            "alignment": "right",
             "aspect_ratio": "4 / 3"
           }
         },
         {
           "type": "editorial_image",
           "settings": {
-            "size": "small",
-            "alignment": "right",
             "aspect_ratio": "1 / 1"
           }
         },
