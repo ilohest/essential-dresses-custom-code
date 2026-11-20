@@ -179,24 +179,14 @@
 
 
   /*
-   * Grille volontairement très aérée.
-   *
-   * On ne mélange plus grid-column: span avec grid-column-start.
-   * Chaque combinaison taille + alignement possède une position complète.
+   * Masonry en colonnes CSS : fonctionne avec n'importe quel nombre
+   * d'images, chaque image garde le format choisi dans son bloc.
    */
   #shopify-section-{{ section.id }} .custom-made__editorial-gallery {
-    display: grid;
-
-    grid-template-columns:
-      repeat(12, minmax(0, 1fr));
+    columns: 3;
 
     column-gap:
-      clamp(18px, 3vw, 52px);
-
-    row-gap:
-      clamp(80px, 10vw, 160px);
-
-    align-items: start;
+      clamp(14px, 2vw, 32px);
   }
 
   #shopify-section-{{ section.id }} .custom-made__editorial-item {
@@ -204,93 +194,12 @@
 
     min-width: 0;
 
-    margin: 0;
-  }
+    margin:
+      0
+      0
+      clamp(14px, 2vw, 32px);
 
-
-  /* --------------------------------------------------------------------------
-     LARGE
-     -------------------------------------------------------------------------- */
-
-  #shopify-section-{{ section.id }}
-  .custom-made__editorial-item--large.custom-made__editorial-item--left {
-    grid-column:
-      1 / span 5;
-  }
-
-  #shopify-section-{{ section.id }}
-  .custom-made__editorial-item--large.custom-made__editorial-item--center {
-    grid-column:
-      4 / span 6;
-  }
-
-  #shopify-section-{{ section.id }}
-  .custom-made__editorial-item--large.custom-made__editorial-item--right {
-    grid-column:
-      8 / span 5;
-  }
-
-
-  /* --------------------------------------------------------------------------
-     MEDIUM
-     -------------------------------------------------------------------------- */
-
-  #shopify-section-{{ section.id }}
-  .custom-made__editorial-item--medium.custom-made__editorial-item--left {
-    grid-column:
-      1 / span 4;
-  }
-
-  #shopify-section-{{ section.id }}
-  .custom-made__editorial-item--medium.custom-made__editorial-item--center {
-    grid-column:
-      5 / span 4;
-  }
-
-  #shopify-section-{{ section.id }}
-  .custom-made__editorial-item--medium.custom-made__editorial-item--right {
-    grid-column:
-      9 / span 4;
-  }
-
-
-  /* --------------------------------------------------------------------------
-     SMALL
-     -------------------------------------------------------------------------- */
-
-  #shopify-section-{{ section.id }}
-  .custom-made__editorial-item--small.custom-made__editorial-item--left {
-    grid-column:
-      1 / span 3;
-  }
-
-  #shopify-section-{{ section.id }}
-  .custom-made__editorial-item--small.custom-made__editorial-item--center {
-    grid-column:
-      6 / span 3;
-  }
-
-  #shopify-section-{{ section.id }}
-  .custom-made__editorial-item--small.custom-made__editorial-item--right {
-    grid-column:
-      10 / span 3;
-  }
-
-
-  /* --------------------------------------------------------------------------
-     Vertical rhythm
-     -------------------------------------------------------------------------- */
-
-  #shopify-section-{{ section.id }}
-  .custom-made__editorial-item:nth-child(2n) {
-    margin-top:
-      clamp(30px, 4vw, 70px);
-  }
-
-  #shopify-section-{{ section.id }}
-  .custom-made__editorial-item:nth-child(3n) {
-    margin-top:
-      clamp(10px, 2vw, 32px);
+    break-inside: avoid;
   }
 
 
@@ -303,13 +212,6 @@
 
     aspect-ratio:
       var(--editorial-ratio, 4 / 5);
-
-    max-height:
-      calc(
-        100svh -
-        var(--header-height, 80px) -
-        80px
-      );
 
     overflow: hidden;
   }
@@ -341,6 +243,7 @@
 
     opacity: 0.52;
   }
+
 
 
   /* --------------------------------------------------------------------------
@@ -737,6 +640,10 @@
 
   @media screen and (max-width: 989px) {
 
+    #shopify-section-{{ section.id }} .custom-made__editorial-gallery {
+      columns: 2;
+    }
+
     #shopify-section-{{ section.id }} .custom-made__container {
       gap: 110px;
     }
@@ -831,104 +738,13 @@
        ------------------------------------------------------------------------ */
 
     #shopify-section-{{ section.id }} .custom-made__editorial-gallery {
-      grid-template-columns:
-        repeat(12, minmax(0, 1fr));
+      columns: 2;
 
       column-gap: 8px;
-
-      row-gap: 68px;
     }
 
-
-    /*
-     * On garde des compositions franchement différentes.
-     * Même les "large" ne remplissent pas tout le viewport.
-     */
-
-    #shopify-section-{{ section.id }}
-    .custom-made__editorial-item--large.custom-made__editorial-item--left {
-      grid-column:
-        1 / span 10;
-    }
-
-    #shopify-section-{{ section.id }}
-    .custom-made__editorial-item--large.custom-made__editorial-item--center {
-      grid-column:
-        2 / span 10;
-    }
-
-    #shopify-section-{{ section.id }}
-    .custom-made__editorial-item--large.custom-made__editorial-item--right {
-      grid-column:
-        3 / span 10;
-    }
-
-
-    #shopify-section-{{ section.id }}
-    .custom-made__editorial-item--medium.custom-made__editorial-item--left {
-      grid-column:
-        1 / span 8;
-    }
-
-    #shopify-section-{{ section.id }}
-    .custom-made__editorial-item--medium.custom-made__editorial-item--center {
-      grid-column:
-        3 / span 8;
-    }
-
-    #shopify-section-{{ section.id }}
-    .custom-made__editorial-item--medium.custom-made__editorial-item--right {
-      grid-column:
-        5 / span 8;
-    }
-
-
-    #shopify-section-{{ section.id }}
-    .custom-made__editorial-item--small.custom-made__editorial-item--left {
-      grid-column:
-        1 / span 6;
-    }
-
-    #shopify-section-{{ section.id }}
-    .custom-made__editorial-item--small.custom-made__editorial-item--center {
-      grid-column:
-        4 / span 6;
-    }
-
-    #shopify-section-{{ section.id }}
-    .custom-made__editorial-item--small.custom-made__editorial-item--right {
-      grid-column:
-        7 / span 6;
-    }
-
-
-    /*
-     * Décalages irréguliers pour éviter l'effet liste.
-     */
-    #shopify-section-{{ section.id }}
-    .custom-made__editorial-item:nth-child(2n) {
-      margin-top: 26px;
-    }
-
-    #shopify-section-{{ section.id }}
-    .custom-made__editorial-item:nth-child(3n) {
-      margin-top: 0;
-    }
-
-    #shopify-section-{{ section.id }}
-    .custom-made__editorial-item:nth-child(4n) {
-      transform:
-        translateY(-18px);
-    }
-
-
-    #shopify-section-{{ section.id }} .custom-made__editorial-image {
-      max-height:
-        calc(
-          100svh -
-          var(--header-height, 80px) -
-          40px
-        );
+    #shopify-section-{{ section.id }} .custom-made__editorial-item {
+      margin-bottom: 8px;
     }
 
     #shopify-section-{{ section.id }} .custom-made__manifesto {
@@ -1139,11 +955,7 @@
             {% for block in editorial_image_blocks %}
 
               <figure
-                class="
-                  custom-made__editorial-item
-                  custom-made__editorial-item--{{ block.settings.size }}
-                  custom-made__editorial-item--{{ block.settings.alignment }}
-                "
+                class="custom-made__editorial-item"
                 {{ block.shopify_attributes }}
               >
 
@@ -2296,46 +2108,6 @@
         },
         {
           "type": "select",
-          "id": "size",
-          "label": "Size",
-          "options": [
-            {
-              "value": "large",
-              "label": "Large"
-            },
-            {
-              "value": "medium",
-              "label": "Medium"
-            },
-            {
-              "value": "small",
-              "label": "Small"
-            }
-          ],
-          "default": "medium"
-        },
-        {
-          "type": "select",
-          "id": "alignment",
-          "label": "Alignment",
-          "options": [
-            {
-              "value": "left",
-              "label": "Left"
-            },
-            {
-              "value": "center",
-              "label": "Center"
-            },
-            {
-              "value": "right",
-              "label": "Right"
-            }
-          ],
-          "default": "center"
-        },
-        {
-          "type": "select",
           "id": "aspect_ratio",
           "label": "Format",
           "options": [
@@ -2528,32 +2300,24 @@
         {
           "type": "editorial_image",
           "settings": {
-            "size": "medium",
-            "alignment": "left",
             "aspect_ratio": "3 / 4"
           }
         },
         {
           "type": "editorial_image",
           "settings": {
-            "size": "large",
-            "alignment": "right",
             "aspect_ratio": "4 / 3"
           }
         },
         {
           "type": "editorial_image",
           "settings": {
-            "size": "small",
-            "alignment": "right",
             "aspect_ratio": "1 / 1"
           }
         },
         {
           "type": "editorial_image",
           "settings": {
-            "size": "medium",
-            "alignment": "left",
             "aspect_ratio": "4 / 5"
           }
         },
